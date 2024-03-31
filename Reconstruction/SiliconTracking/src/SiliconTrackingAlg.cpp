@@ -1674,7 +1674,8 @@ void SiliconTrackingAlg::CreateTrack(TrackExtended * trackAR ) {
   
   for (int itrk=0; itrk<nTrk; ++itrk) {
     TrackExtended * trackOld = _trackImplVec[itrk];
-    TrackerHitExtendedVec& hitVecOld = trackOld->getTrackerHitExtendedVec();
+    // fucd: TrackerHitExtendedVec& will change after merge split tracks, so must TrackerHitExtendedVec
+    TrackerHitExtendedVec hitVecOld = trackOld->getTrackerHitExtendedVec();
     
     float phiNew = trackAR->getPhi();
     float phiOld = trackOld->getPhi();
