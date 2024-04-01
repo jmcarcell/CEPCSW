@@ -233,7 +233,6 @@ StatusCode SiliconTrackingAlg::execute(){
   //_trackImplVec.reserve(100);
 
   int successVTX = InitialiseVTX();
-  //int successFTD = 0;
   int successFTD = InitialiseFTD();
   if (successVTX == 1) {
     
@@ -299,10 +298,6 @@ StatusCode SiliconTrackingAlg::execute(){
     
     debug() <<  "End of picking up remaining hits " << endmsg;
 
-    //edm4hep::TrackCollection* trkCol = nullptr; 
-    //edm4hep::LCRelationCollection* relCol = nullptr;
-    //auto trkCol = _outColHdl.createAndPut();
-    //auto relCol = _outRelColHdl.createAndPut();
     /*
     LCCollectionVec * trkCol = new LCCollectionVec(LCIO::TRACK);
     // if we want to point back to the hits we need to set the flag
@@ -2829,42 +2824,8 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       for (std::vector< std::pair<float, edm4hep::TrackerHit> >::iterator it=r2_values.begin(); it!=r2_values.end(); ++it) {
         trkHits.push_back(it->second);
       }
-      //std::cout << "fucd------------------3 " << _trksystem << std::endl;
-      //for (unsigned ihit_indx=0 ; ihit_indx < trkHits.size(); ++ihit_indx) {
-      //  std::cout << "fucd trk hit " << *trkHits[ihit_indx] << " " << trkHits[ihit_indx]->getCovMatrix()[0]
-      //		  << " " << BitSet32(trkHits[ihit_indx]->getType())[ ILDTrkHitTypeBit::COMPOSITE_SPACEPOINT ] << endmsg;
-      //}
-      /*
-      auto _trackSystemSvc = service<ITrackSystemSvc>("TrackSystemSvc");
-      if ( !_trackSystemSvc ) {
-	error() << "Failed to find TrackSystemSvc ..." << endmsg;
-	return;
-      }
-      _trksystem =  _trackSystemSvc->getTrackSystem();
 
-      if( _trksystem == 0 ){
-	error() << "Cannot initialize MarlinTrkSystem of Type: KalTest" <<endmsg;
-	return;
-      }
-      debug() << "_trksystem pointer " << _trksystem << endmsg;
-      
-      _trksystem->setOption( IMarlinTrkSystem::CFG::useQMS,        _MSOn ) ;
-      _trksystem->setOption( IMarlinTrkSystem::CFG::usedEdx,       _ElossOn) ;
-      _trksystem->setOption( IMarlinTrkSystem::CFG::useSmoothing,  _SmoothOn) ;
-      _trksystem->init() ;
-      */
       bool fit_backwards = IMarlinTrack::backward;
-      
-      /*
-      MarlinTrk::IMarlinTrack* marlinTrk = nullptr;
-      try{
-	marlinTrk = _trksystem->createTrack();
-      }
-      catch(...){
-	error() << "Cannot create MarlinTrack ! " << endmsg;
-	return;
-      }
-      */
       
       int status = 0;
       debug() << "call createFinalisedLCIOTrack now" << endmsg;
@@ -2891,7 +2852,6 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       std::vector<std::pair<edm4hep::TrackerHit , double> > hits_in_fit ;  
       std::vector<std::pair<edm4hep::TrackerHit , double> > outliers ;
       std::vector<edm4hep::TrackerHit> all_hits;    
-      //all_hits.reserve(300);
 
       UTIL::BitField64 cellID_encoder( UTIL::ILDCellID0::encoder_string ) ;
 
