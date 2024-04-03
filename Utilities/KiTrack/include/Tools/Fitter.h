@@ -71,7 +71,7 @@ class Fitter{
 public:
    
   Fitter( edm4hep::MutableTrack* track , MarlinTrk::IMarlinTrkSystem* trkSystem );
-  Fitter( std::vector < edm4hep::TrackerHit > trackerHits, MarlinTrk::IMarlinTrkSystem* trkSystem );
+  Fitter( std::vector < edm4hep::TrackerHit3D > trackerHits, MarlinTrk::IMarlinTrkSystem* trkSystem );
   Fitter( edm4hep::MutableTrack* track , MarlinTrk::IMarlinTrkSystem* trkSystem, int VXDFlag );  
 
    
@@ -111,7 +111,7 @@ private:
    static float _bField;
    
    
-   std::vector< edm4hep::TrackerHit > _trackerHits;
+   std::vector< edm4hep::TrackerHit3D > _trackerHits;
    
    /** here the created TrackStates (plus) are stored */
    std::vector< const TrackStatePlus* > _trackStatesPlus;

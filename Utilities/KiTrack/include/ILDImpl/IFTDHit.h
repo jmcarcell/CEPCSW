@@ -2,7 +2,14 @@
 #define IFTDHit_h
 
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 #include "KiTrack/IHit.h"
 
@@ -16,7 +23,7 @@ namespace KiTrackMarlin{
   class IFTDHit : public IHit{
   public:
         
-    edm4hep::TrackerHit* getTrackerHit() { return &_trackerHit; };
+    edm4hep::TrackerHit3D* getTrackerHit() { return &_trackerHit; };
             
     int getSide() { return _side; }
     unsigned getModule() { return _module; }
@@ -31,7 +38,7 @@ namespace KiTrackMarlin{
     
   protected:
     
-    edm4hep::TrackerHit _trackerHit;
+    edm4hep::TrackerHit3D _trackerHit;
             
     int _side;
     unsigned _layer;

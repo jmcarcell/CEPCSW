@@ -2,7 +2,14 @@
 #define Navigation_h
 
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include <map>
 
 #if __has_include("edm4hep/EDM4hepVersion.h")
@@ -23,25 +30,25 @@ class Navigation{
   
   void Initialize();
   //void AddDataHandle(DataHandle* hdl){if(hdl)m_hdlVec.push_back(hdl);};
-  void AddTrackerHitCollection(const edm4hep::TrackerHitCollection* col){m_hitColVec.push_back(col);};
+  void AddTrackerHitCollection(const edm4hep::TrackerHit3DCollection* col){m_hitColVec.push_back(col);};
   void AddTrackerAssociationCollection(const edm4hep::MCRecoTrackerAssociationCollection* col){m_assColVec.push_back(col);};
 
 #if EDM4HEP_BUILD_VERSION <= EDM4HEP_VERSION(0, 10, 5)
-  edm4hep::TrackerHit GetTrackerHit(const edm4hep::ObjectID& id, bool delete_by_caller=true);
+  edm4hep::TrackerHit3D GetTrackerHit(const edm4hep::ObjectID& id, bool delete_by_caller=true);
   std::vector<edm4hep::SimTrackerHit> GetRelatedTrackerHit(const edm4hep::ObjectID& id);
 #else
-  edm4hep::TrackerHit GetTrackerHit(const podio::ObjectID& id, bool delete_by_caller=true);
+  edm4hep::TrackerHit3D GetTrackerHit(const podio::ObjectID& id, bool delete_by_caller=true);
   std::vector<edm4hep::SimTrackerHit> GetRelatedTrackerHit(const podio::ObjectID& id);
 #endif
-  std::vector<edm4hep::SimTrackerHit> GetRelatedTrackerHit(const edm4hep::TrackerHit& hit);
-  std::vector<edm4hep::SimTrackerHit> GetRelatedTrackerHit(const edm4hep::TrackerHit& hit, const edm4hep::MCRecoTrackerAssociationCollection* col);
+  std::vector<edm4hep::SimTrackerHit> GetRelatedTrackerHit(const edm4hep::TrackerHit3D& hit);
+  std::vector<edm4hep::SimTrackerHit> GetRelatedTrackerHit(const edm4hep::TrackerHit3D& hit, const edm4hep::MCRecoTrackerAssociationCollection* col);
   
   //static Navigation* m_fNavigation;
  private:
   static Navigation* m_fNavigation;
   //DataHandle<edm4hep::MCRecoTrackerAssociationCollection> _inHitAssColHdl{"FTDStripTrackerHitsAssociation", Gaudi::DataHandle::Reader, this};
-  std::vector<const edm4hep::TrackerHitCollection*> m_hitColVec;
+  std::vector<const edm4hep::TrackerHit3DCollection*> m_hitColVec;
   std::vector<const edm4hep::MCRecoTrackerAssociationCollection*> m_assColVec;
-  std::map<int, edm4hep::TrackerHit> m_trkHits;
+  std::map<int, edm4hep::TrackerHit3D> m_trkHits;
 };
 #endif 

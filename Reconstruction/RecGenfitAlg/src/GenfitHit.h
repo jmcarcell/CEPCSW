@@ -25,7 +25,7 @@ namespace dd4hep {
 
 class GenfitHit{
     public:
-        GenfitHit(const edm4hep::TrackerHit* trackerHit,
+        GenfitHit(const edm4hep::TrackerHit3D* trackerHit,
                 const edm4hep::SimTrackerHit* simTrackerHit,
                 const dd4hep::DDSegmentation::BitFieldCoder* decoder,
                 const dd4hep::DDSegmentation::GridDriftChamber* gridDriftChamber,
@@ -38,7 +38,7 @@ class GenfitHit{
         double getDriftDistanceErr()const{return m_driftDistanceErr;}
         double getDriftDistanceTruth()const{return m_driftDistanceTruth;}
         const edm4hep::SimTrackerHit* getSimTrackerHit()const{return m_simTrackerHit;}
-        const edm4hep::TrackerHit* getTrackerHit()const{return m_trackerHit;}
+        const edm4hep::TrackerHit3D* getTrackerHit()const{return m_trackerHit;}
         TVector3 getEnd0()const;
         TVector3 getEnd1()const;
         TVector3 getTruthPos()const;
@@ -54,7 +54,7 @@ class GenfitHit{
     private:
         const dd4hep::DDSegmentation::BitFieldCoder* m_decoder;
         const dd4hep::DDSegmentation::GridDriftChamber* m_gridDriftChamber;
-        const edm4hep::TrackerHit* m_trackerHit;
+        const edm4hep::TrackerHit3D* m_trackerHit;
         const edm4hep::SimTrackerHit* m_simTrackerHit;
         double m_driftDistance;
         double m_driftDistanceErr;

@@ -8,8 +8,22 @@
 
 #include "GaudiAlg/GaudiAlgorithm.h"
 #include "edm4hep/Track.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackCollection.h"
 #include <string>
 
@@ -143,9 +157,9 @@ class ClupatraAlg : public GaudiAlgorithm {
   Gaudi::Property<std::string> m_fitToolName{this, "FitterTool", "KalTestTool/KalTest010"};
 
 
-  DataHandle<edm4hep::TrackerHitCollection> _TPCHitCollectionHandle{"TPCTrackerHits", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _SITHitCollectionHandle{"SIDTrackerHits", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _VTXHitCollectionHandle{"VTXTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _TPCHitCollectionHandle{"TPCTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _SITHitCollectionHandle{"SIDTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _VTXHitCollectionHandle{"VTXTrackerHits", Gaudi::DataHandle::Reader, this};
 
   DataHandle<edm4hep::TrackCollection> _ClupatraTrackCollectionHandle{"ClupatraTracks", Gaudi::DataHandle::Writer, this};
   DataHandle<edm4hep::TrackCollection> _ClupatraTrackSegmentCollectionHandle{"ClupatraSegmentTracks", Gaudi::DataHandle::Writer, this};

@@ -72,7 +72,7 @@ StatusCode SpacePointBuilderAlg::execute(){
   auto spCol = _outSPColHdl.createAndPut();
   auto relCol = _outSPAssColHdl.createAndPut();
 
-  const edm4hep::TrackerHitCollection* hitCol = nullptr;
+  const edm4hep::TrackerHit3DCollection* hitCol = nullptr;
   try {
     hitCol = _inHitColHdl.get();
   }
@@ -98,7 +98,7 @@ StatusCode SpacePointBuilderAlg::execute(){
     _nStripsTooParallel = 0;
     _nPlanesNotParallel = 0;
     
-    //edm4hep::TrackerHitCollection* spCol = new edm4hep::TrackerHitCollection();    // output spacepoint collection
+    //edm4hep::TrackerHit3DCollection* spCol = new edm4hep::TrackerHit3DCollection();    // output spacepoint collection
     //edm4hep::MCRecoTrackerAssociationCollection* relCol = new edm4hep::MCRecoTrackerAssociationCollection();    // output relation collection
     
     // to store the weights
@@ -268,7 +268,7 @@ StatusCode SpacePointBuilderAlg::finalize(){
   return GaudiAlgorithm::finalize();
 }
 
-edm4hep::MutableTrackerHit SpacePointBuilderAlg::createSpacePoint( edm4hep::TrackerHit a , edm4hep::TrackerHit b, double stripLength ){
+edm4hep::MutableTrackerHit SpacePointBuilderAlg::createSpacePoint( edm4hep::TrackerHit3D a , edm4hep::TrackerHit3D b, double stripLength ){
   
   const edm4hep::Vector3d& pa = a.getPosition();
   double xa = pa[0];
@@ -406,7 +406,7 @@ edm4hep::MutableTrackerHit SpacePointBuilderAlg::createSpacePoint( edm4hep::Trac
   }
   
   //Create the new TrackerHit
-  edm4hep::MutableTrackerHit spacePoint;// = new edm4hep::TrackerHit();
+  edm4hep::MutableTrackerHit spacePoint;// = new edm4hep::TrackerHit3D();
   
   edm4hep::Vector3d pos(point.x(), point.y(), point.z());
   spacePoint.setPosition(pos) ;

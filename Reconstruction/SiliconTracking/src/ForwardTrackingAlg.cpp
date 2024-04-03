@@ -3,7 +3,14 @@
 #include "TrackSystemSvc/ITrackSystemSvc.h"
 #include "DataHelper/Navigation.h"
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackerHitPlane.h"
 #include "edm4hep/Track.h"
 #if __has_include("edm4hep/EDM4hepVersion.h")
@@ -248,7 +255,7 @@ StatusCode ForwardTrackingAlg::execute(){
   
   debug() << "\t\t---Reading in Collections---" << endmsg;
   Navigation::Instance()->Initialize();
-  std::vector<const edm4hep::TrackerHitCollection*> hitFTDCollections;
+  std::vector<const edm4hep::TrackerHit3DCollection*> hitFTDCollections;
   int pixelCollectionID = -1; 
   try {
     auto hitFTDPixelCol = _inFTDPixelColHdl.get();
@@ -264,7 +271,7 @@ StatusCode ForwardTrackingAlg::execute(){
     auto hitFTDSpacePointCol = _inFTDSpacePointColHdl.get();
     hitFTDCollections.push_back(hitFTDSpacePointCol);
     Navigation::Instance()->AddTrackerHitCollection(hitFTDSpacePointCol);
-    //const edm4hep::TrackerHitCollection* rawHitCol = nullptr;
+    //const edm4hep::TrackerHit3DCollection* rawHitCol = nullptr;
     try{
       auto rawHitCol = _inFTDRawColHdl.get();
       Navigation::Instance()->AddTrackerHitCollection(rawHitCol);
@@ -281,7 +288,7 @@ StatusCode ForwardTrackingAlg::execute(){
     return StatusCode::SUCCESS;
   }
   /*
-  const edm4hep::TrackerHitCollection* rawHitCol = nullptr;
+  const edm4hep::TrackerHit3DCollection* rawHitCol = nullptr;
   if(1){
     try{
       rawHitCol = _inFTDRawColHdl.get();
@@ -299,7 +306,7 @@ StatusCode ForwardTrackingAlg::execute(){
       if(pixelCollectionID==hitFTDCollections[iCol]->getID()){
 	if ( UTIL::BitSet32( trackerHit.getType() )[ UTIL::ILDTrkHitTypeBit::ONE_DIMENSIONAL ] ) continue;
       }
-      edm4hep::TrackerHit hit = trackerHit;
+      edm4hep::TrackerHit3D hit = trackerHit;
       debug() << "hit " << trackerHit.id() << " " << KiTrackMarlin::getCellID0Info( trackerHit.getCellID() ) 
 	      << " " << KiTrackMarlin::getPositionInfo( hit )<< endmsg;
          
@@ -994,7 +1001,7 @@ void ForwardTrackingAlg::finaliseTrack( edm4hep::MutableTrack* trackImpl ){
   
   unsigned int nHits = trackImpl->trackerHits_size();
   for( unsigned j=0; j<nHits; j++ ){
-    const edm4hep::TrackerHit& hit = trackImpl->getTrackerHits(j);
+    const edm4hep::TrackerHit3D& hit = trackImpl->getTrackerHits(j);
     UTIL::BitField64 encoder( UTIL::ILDCellID0::encoder_string );
     encoder.setValue( hit.getCellID() );
     int subdet =  encoder[UTIL::ILDCellID0::subdet];

@@ -67,7 +67,7 @@ class RecGenfitAlgDC:public GaudiAlgorithm {
         DataHandle<edm4hep::EventHeaderCollection> _headerCol{
             "EventHeaderCol", Gaudi::DataHandle::Reader, this};
         //Drift chamber rec hit and trac
-        DataHandle<edm4hep::TrackerHitCollection> m_digiDCHitsCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_digiDCHitsCol{
             "DigiDCHitCollection", Gaudi::DataHandle::Reader, this};
         DataHandle<edm4hep::TrackCollection> m_dcTrackCol{
             "DCTrackCollection", Gaudi::DataHandle::Reader, this};
@@ -81,7 +81,7 @@ class RecGenfitAlgDC:public GaudiAlgorithm {
             m_dcHitAssociationCol{"DCHitAssociationCollection",
                 Gaudi::DataHandle::Reader, this};
         //output hits and particles
-        DataHandle<edm4hep::TrackerHitCollection> m_dcFitRecHitCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_dcFitRecHitCol{
             "DCFitRecHitsCollection", Gaudi::DataHandle::Writer, this};
         DataHandle<edm4hep::ReconstructedParticleCollection> m_dcRecParticleCol{
             "DCRecParticleCollection", Gaudi::DataHandle::Writer, this};

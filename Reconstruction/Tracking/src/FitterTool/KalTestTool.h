@@ -14,16 +14,16 @@ class KalTestTool : public extends<AlgTool, ITrackFitterTool> {
   using extends::extends;
   //KalTestTool(void* p) { m_pAlgUsing=p; };
   
-  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit>& trackHits,
+  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit3D>& trackHits,
 		  const decltype(edm4hep::TrackState::covMatrix)& covMatrix, double maxChi2perHit, bool backward = true) override;
-  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit>& trackHits,
+  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit3D>& trackHits,
                   edm4hep::TrackState trackState, double maxChi2perHit, bool backward = true) override;
 
   StatusCode initialize() override;
   StatusCode finalize() override;
 
-  std::vector<std::pair<edm4hep::TrackerHit, double> >& GetHitsInFit() override {return m_hitsInFit;};
-  std::vector<std::pair<edm4hep::TrackerHit, double> >& GetOutliers() override {return m_outliers;};
+  std::vector<std::pair<edm4hep::TrackerHit3D, double> >& GetHitsInFit() override {return m_hitsInFit;};
+  std::vector<std::pair<edm4hep::TrackerHit3D, double> >& GetOutliers() override {return m_outliers;};
   void Clear() override {m_hitsInFit.clear(); m_outliers.clear();};
 
  private:
@@ -36,8 +36,8 @@ class KalTestTool : public extends<AlgTool, ITrackFitterTool> {
   MarlinTrk::IMarlinTrkSystem* m_factoryMarlinTrk = nullptr;
 
   void* m_pAlgUsing = nullptr;
-  std::vector<std::pair<edm4hep::TrackerHit, double> > m_hitsInFit ;
-  std::vector<std::pair<edm4hep::TrackerHit, double> > m_outliers ;
+  std::vector<std::pair<edm4hep::TrackerHit3D, double> > m_hitsInFit ;
+  std::vector<std::pair<edm4hep::TrackerHit3D, double> > m_outliers ;
 };
 
 #endif

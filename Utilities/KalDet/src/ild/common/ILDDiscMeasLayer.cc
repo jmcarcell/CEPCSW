@@ -12,7 +12,14 @@
 #include "TNode.h"
 #include "TString.h"
 
-#include <edm4hep/TrackerHit.h>
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
+#include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 #include "gearimpl/Vector3D.h"
 
@@ -207,13 +214,13 @@ Bool_t ILDDiscMeasLayer::IsOnSurface(const TVector3 &xx) const
 }
 
 
-ILDVTrackHit* ILDDiscMeasLayer::ConvertLCIOTrkHit(edm4hep::TrackerHit trkhit) const {
+ILDVTrackHit* ILDDiscMeasLayer::ConvertLCIOTrkHit(edm4hep::TrackerHit3D trkhit) const {
   
-  //edm4hep::TrackerHitPlane* plane_hit = dynamic_cast<EVENT::TrackerHitPlane*>( trkhit ) ;
-  //edm4hep::TrackerHitPlane* plane_hit = trkhit;
+  //edm4hep::TrackerHit3DPlane* plane_hit = dynamic_cast<EVENT::TrackerHitPlane*>( trkhit ) ;
+  //edm4hep::TrackerHit3DPlane* plane_hit = trkhit;
   if((trkhit.getType()&8)!=8) return NULL;
   
-  //edm4hep::TrackerHit plane_hit = trkhit;
+  //edm4hep::TrackerHit3D plane_hit = trkhit;
   //if( plane_hit == NULL )  return NULL; // SJA:FIXME: should be replaced with an exception  
   
   //gear::Vector3D U(1.0,plane_hit.getU()[1],plane_hit.getU()[0],gear::Vector3D::spherical);

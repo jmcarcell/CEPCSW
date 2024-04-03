@@ -4,7 +4,14 @@
 #include <algorithm>
 #include <cmath>
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 #include "UTIL/BitSet32.h"
 #include "UTIL/ILDConf.h"
 #include "UTIL/LCTrackerConf.h"
@@ -14,7 +21,7 @@
 #include "Tools/KiTrackMarlinTools.h"
 
 
-FTDHelixFitter::FTDHelixFitter( std::vector<edm4hep::TrackerHit> trackerHits ){
+FTDHelixFitter::FTDHelixFitter( std::vector<edm4hep::TrackerHit3D> trackerHits ){
   _trackerHits = trackerHits;
   fit();
 }
@@ -24,7 +31,7 @@ FTDHelixFitter::FTDHelixFitter( edm4hep::MutableTrack* track ){
   //int nHits = track->trackerHits_size();
   std::copy(track->trackerHits_begin(), track->trackerHits_end(), std::back_inserter(_trackerHits));
   //for(int i=0;i<nHits;i++){
-  //  edm4hep::TrackerHit hit = &track->getTrackerHits(i);
+  //  edm4hep::TrackerHit3D hit = &track->getTrackerHits(i);
   //  _trackerHits.push_back(hit);
   //}
   fit();
@@ -57,7 +64,7 @@ void FTDHelixFitter::fit(){
   float epar[15];
   
   for( int i=0; i<nHits; i++ ){
-    edm4hep::TrackerHit hit = _trackerHits[i];
+    edm4hep::TrackerHit3D hit = _trackerHits[i];
       
     xh[i] = hit.getPosition()[0];
     yh[i] = hit.getPosition()[1];

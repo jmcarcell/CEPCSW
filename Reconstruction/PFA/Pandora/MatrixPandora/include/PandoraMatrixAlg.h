@@ -8,7 +8,14 @@
 #include "edm4hep/ReconstructedParticleCollection.h"
 #include "edm4hep/EventHeaderCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/CalorimeterHitCollection.h"
 #include "edm4hep/VertexCollection.h"
 #include "edm4hep/TrackCollection.h"

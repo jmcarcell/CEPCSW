@@ -16,7 +16,14 @@
 #include "edm4hep/MCParticle.h"
 #include "edm4hep/MCParticleCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackCollection.h"
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 #include "edm4hep/ReconstructedParticle.h"
@@ -213,7 +220,7 @@ StatusCode RecGenfitAlgDC::execute()
         debug()<<"TrackCollection not found"<<endmsg;
         return StatusCode::SUCCESS;
     }
-    const edm4hep::TrackerHitCollection* didiDCHitsCol=nullptr;
+    const edm4hep::TrackerHit3DCollection* didiDCHitsCol=nullptr;
     didiDCHitsCol=m_digiDCHitsCol.get();
     if(nullptr==didiDCHitsCol) {
         debug()<<"DigiDCHitCollection not found"<<endmsg;

@@ -46,7 +46,7 @@ namespace clupatra_new{
 		edm4hep::MutableTrack lTrk  = o ;
 
 		// compute z-extend of this track segment
-		// const edm4hep::TrackerHitVec& hv = lTrk->getTrackerHits() ;
+		// const edm4hep::TrackerHit3DVec& hv = lTrk->getTrackerHits() ;
 
 		float zMin =  1e99 ;
 		float zMax = -1e99 ;
@@ -291,9 +291,9 @@ namespace clupatra_new{
 		encoder[UTIL::ILDCellID0::subdet] = UTIL::ILDDetID::TPC ;
 
 #if PODIO_BUILD_VERSION < PODIO_VERSION(0, 17, 4)
-		edm4hep::TrackerHit firstHit = 0;
+		edm4hep::TrackerHit3D firstHit = 0;
 #else
-		auto firstHit = edm4hep::TrackerHit::makeEmpty();
+		auto firstHit = edm4hep::TrackerHit3D::makeEmpty();
 #endif
 		// = 0 equal to unlink()
                 //firstHit.unlink();
@@ -438,7 +438,7 @@ namespace clupatra_new{
 
 						double deltaChi = 0. ;
 
-						edm4hep::TrackerHit ht = bestHit->first->edm4hepHit;
+						edm4hep::TrackerHit3D ht = bestHit->first->edm4hepHit;
 						int addHit =  theTrk->addAndFit(ht , deltaChi, dChi2Max )  ;
 
 
@@ -565,7 +565,7 @@ namespace clupatra_new{
 				if( ch2Min  < chi2Cut ) {
 
 					double deltaChi = 0. ;
-					edm4hep::TrackerHit bh = bestHit->first->edm4hepHit;
+					edm4hep::TrackerHit3D bh = bestHit->first->edm4hepHit;
 					int addHit = trk->addAndFit( bh, deltaChi, dChi2Max ) ;
 
 
@@ -1250,7 +1250,7 @@ start:
 		if( reverse_order ){
 		  //std::cout << "It is true order" << std::endl;
 		  for( CluTrack::reverse_iterator it=clu->rbegin() ; it != clu->rend() ; ++it){
-		    edm4hep::TrackerHit ph = (*it)->first->edm4hepHit;
+		    edm4hep::TrackerHit3D ph = (*it)->first->edm4hepHit;
 		    trk->addHit(ph) ;
 		    ++nHit ;
 		    //std::cout  <<  "   hit  added  " <<  (*it)->first->edm4hepHit.id() << std::endl ;
@@ -1261,7 +1261,7 @@ start:
 		} else {
 		  //std::cout << "It is reverse order" << std::endl;
 		  for( CluTrack::iterator it=clu->begin() ; it != clu->end() ; ++it){
-		    edm4hep::TrackerHit ph = (*it)->first->edm4hepHit;
+		    edm4hep::TrackerHit3D ph = (*it)->first->edm4hepHit;
 		    if( trk->addHit(ph) == MarlinTrk::IMarlinTrack::success ){
 		      //std::cout << "   hit added  " <<  (*it)->first->edm4hepHit.id() << std::endl;
 		    }
@@ -1287,7 +1287,7 @@ start:
 		}
 
 
-                std::vector<std::pair<edm4hep::TrackerHit, double> > hitsInFit ;
+                std::vector<std::pair<edm4hep::TrackerHit3D, double> > hitsInFit ;
                 trk->getHitsInFit( hitsInFit ) ;
 		//----- if the fit did not fail but has a small number of hits used,
 		//      we try again one more time with a larger max-chi2-increment
@@ -1346,12 +1346,12 @@ start:
 		   trk->subdetectorHitNumbers()[ 2*lcio::ILDDetID::TPC - 1 ] =  nHit ;
 		   */
 
-		RuntimeMap<edm4hep::TrackerHit, int> DChi2_of_hit;
+		RuntimeMap<edm4hep::TrackerHit3D, int> DChi2_of_hit;
 
 		if( mtrk != 0 && ! c->empty() ){
 
 
-			std::vector<std::pair<edm4hep::TrackerHit, double> > hitsInFit ;
+			std::vector<std::pair<edm4hep::TrackerHit3D, double> > hitsInFit ;
 			mtrk->getHitsInFit( hitsInFit ) ;
                         // for (auto hit : hitsInFit) std::cout << hit.second << std::endl;
 			// FIXME Mingrui
@@ -1395,8 +1395,8 @@ start:
 				// lcio::TrackerHit* fHit =  ( reverse_order ?  hb->first->lcioHit  :  hf->first->lcioHit ) ;
 				// lcio::TrackerHit* lHit =  ( reverse_order ?  hf->first->lcioHit  :  hb->first->lcioHit ) ;
 
-				edm4hep::TrackerHit fHit = (hitsInFit.back().first);
-				edm4hep::TrackerHit lHit = (hitsInFit.front().first);
+				edm4hep::TrackerHit3D fHit = (hitsInFit.back().first);
+				edm4hep::TrackerHit3D lHit = (hitsInFit.front().first);
 
 				//order of hits in fit is reversed wrt time  (we fit inwards)
 
@@ -1418,9 +1418,9 @@ start:
 				code = mtrk->getTrackState( lHit, tsLH, chi2, ndf ) ;
 #else     // get the track state at the last hit by propagating from the last(first) constrained fit position (a la MarlinTrkUtils)
 #if PODIO_BUILD_VERSION < PODIO_VERSION(0, 17, 4)
-				edm4hep::TrackerHit last_constrained_hit(0);
+				edm4hep::TrackerHit3D last_constrained_hit(0);
 #else
-				auto last_constrained_hit = edm4hep::TrackerHit::makeEmpty();
+				auto last_constrained_hit = edm4hep::TrackerHit3D::makeEmpty();
 #endif
 				code = mtrk->getTrackerHitAtPositiveNDF( last_constrained_hit );
 				//code = mtrk->smooth() ;

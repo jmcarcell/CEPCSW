@@ -8,7 +8,14 @@
 #include "edm4hep/EventHeaderCollection.h"
 #include "edm4hep/MCParticleCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackCollection.h"
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 
@@ -294,12 +301,12 @@ class SiliconTrackingAlg : public GaudiAlgorithm {
   // Input collections
   DataHandle<edm4hep::EventHeaderCollection> _headerColHdl{"EventHeaderCol", Gaudi::DataHandle::Reader, this};
   DataHandle<edm4hep::MCParticleCollection> _inMCColHdl{"MCParticle", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inVTXColHdl{"VXDTrackerHits", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inFTDPixelColHdl{"FTDPixelTrackerHits", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inFTDSpacePointColHdl{"FTDSpacePoints", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inSITColHdl{"SITSpacePoints", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inSITRawColHdl{"SITTrackerHits", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inFTDRawColHdl{"FTDStripTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inVTXColHdl{"VXDTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inFTDPixelColHdl{"FTDPixelTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inFTDSpacePointColHdl{"FTDSpacePoints", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inSITColHdl{"SITSpacePoints", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inSITRawColHdl{"SITTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inFTDRawColHdl{"FTDStripTrackerHits", Gaudi::DataHandle::Reader, this};
   // Output collections
   DataHandle<edm4hep::TrackCollection> _outColHdl{"SiTracks", Gaudi::DataHandle::Writer, this};
   //DataHandle<edm4hep::LCRelationCollection> _outRelColHdl{"TrackerHitRelations", Gaudi::DataHandle::Reader, this};
@@ -417,11 +424,11 @@ class SiliconTrackingAlg : public GaudiAlgorithm {
   //  int _createMap;
   
   UTIL::BitField64* _encoder;
-  int getDetectorID(edm4hep::TrackerHit hit) { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::subdet]; }
-  int getSideID(edm4hep::TrackerHit hit)     { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::side]; };
-  int getLayerID(edm4hep::TrackerHit hit)    { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::layer]; };
-  int getModuleID(edm4hep::TrackerHit hit)   { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::module]; };
-  int getSensorID(edm4hep::TrackerHit hit)   { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::sensor]; };
+  int getDetectorID(edm4hep::TrackerHit3D hit) { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::subdet]; }
+  int getSideID(edm4hep::TrackerHit3D hit)     { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::side]; };
+  int getLayerID(edm4hep::TrackerHit3D hit)    { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::layer]; };
+  int getModuleID(edm4hep::TrackerHit3D hit)   { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::module]; };
+  int getSensorID(edm4hep::TrackerHit3D hit)   { _encoder->setValue(hit.getCellID()); return (*_encoder)[lcio::ILDCellID0::sensor]; };
   
   StatusCode setupGearGeom() ;
   

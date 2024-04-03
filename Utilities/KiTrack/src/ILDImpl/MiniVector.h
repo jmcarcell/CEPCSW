@@ -4,7 +4,14 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <edm4hep/TrackerHit.h>
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
+#include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 //#include "UTIL/LCTrackerConf.h"
 #include "KiTrack/IHit.h"
 
@@ -13,7 +20,7 @@
 #include <vector>
 #include <math.h>
 
-typedef std::vector<edm4hep::TrackerHit*> TrackerHitVec;
+typedef std::vector<edm4hep::TrackerHit3D*> TrackerHitVec;
 
 namespace KiTrackMarlin{
   class MiniVector : public IHit{
@@ -21,7 +28,7 @@ namespace KiTrackMarlin{
     TrackerHitVec HitVec ;
     
     // Class constructor
-    MiniVector(edm4hep::TrackerHit * outer, edm4hep::TrackerHit * inner);
+    MiniVector(edm4hep::TrackerHit3D * outer, edm4hep::TrackerHit3D * inner);
     
     MiniVector(TrackerHitVec hitPair);
     

@@ -6,13 +6,27 @@
 #include "edm4hep/EventHeaderCollection.h"
 #include "edm4hep/MCParticleCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackCollection.h"
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 
 #include <string>
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 #include "TrackSystemSvc/IMarlinTrkSystem.h"
 #include "Tracking/ITrackFitterTool.h"
 //#include "gear/BField.h"
@@ -228,9 +242,9 @@ class ForwardTrackingAlg : public GaudiAlgorithm {
   std::string getInfo_map_sector_hits();
       
   /* Input collection names */
-  DataHandle<edm4hep::TrackerHitCollection> _inFTDPixelColHdl{"FTDPixelTrackerHits", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inFTDSpacePointColHdl{"FTDSpacePoints", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inFTDRawColHdl{"FTDStripTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inFTDPixelColHdl{"FTDPixelTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inFTDSpacePointColHdl{"FTDSpacePoints", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inFTDRawColHdl{"FTDStripTrackerHits", Gaudi::DataHandle::Reader, this};
   
   /** Output collection name */
   DataHandle<edm4hep::TrackCollection> _outColHdl{"ForwardTracks", Gaudi::DataHandle::Writer, this};

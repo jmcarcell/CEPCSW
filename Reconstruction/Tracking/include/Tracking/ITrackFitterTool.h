@@ -28,12 +28,12 @@ class ITrackFitterTool: virtual public IAlgTool {
   DeclareInterfaceID(ITrackFitterTool, 0, 1);
   virtual ~ITrackFitterTool() {}
 
-  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit>& trackHits,
+  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit3D>& trackHits,
                   const decltype(edm4hep::TrackState::covMatrix)& covMatrix, double maxChi2perHit, bool backward) = 0;
-  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit>& trackHits,
+  virtual int Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit3D>& trackHits,
                   edm4hep::TrackState trackState, double maxChi2perHit, bool backward) = 0;
-  virtual std::vector<std::pair<edm4hep::TrackerHit, double> >& GetHitsInFit() = 0;
-  virtual std::vector<std::pair<edm4hep::TrackerHit, double> >& GetOutliers() = 0;
+  virtual std::vector<std::pair<edm4hep::TrackerHit3D, double> >& GetHitsInFit() = 0;
+  virtual std::vector<std::pair<edm4hep::TrackerHit3D, double> >& GetOutliers() = 0;
   virtual void Clear() = 0;
 };
 

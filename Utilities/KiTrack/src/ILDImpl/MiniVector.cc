@@ -6,7 +6,7 @@
 using namespace KiTrack;
 using namespace KiTrackMarlin;
 
-MiniVector::MiniVector(edm4hep::TrackerHit * outer, edm4hep::TrackerHit * inner) { 
+MiniVector::MiniVector(edm4hep::TrackerHit3D * outer, edm4hep::TrackerHit3D * inner) { 
   HitVec.push_back(outer);
   HitVec.push_back(inner);
 }

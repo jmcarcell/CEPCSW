@@ -43,7 +43,14 @@
 
 #include "RuntimeMap.h"
 
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackCollection.h"
 // #include "edm4hep/TrackerHitPlane.h"
 
@@ -65,7 +72,7 @@ using namespace clupatra_new ;
 RuntimeMap<edm4hep::Track, clupatra_new::TrackInfoStruct*> TrackInfo_of_edm4hepTrack;
 RuntimeMap<edm4hep::Track, MarlinTrk::IMarlinTrack*> MarTrk_of_edm4hepTrack;
 RuntimeMap<MarlinTrk::IMarlinTrack*, clupatra_new::CluTrack*> CluTrk_of_MarTrack;
-RuntimeMap<edm4hep::TrackerHit, clupatra_new::Hit*> GHitof;
+RuntimeMap<edm4hep::TrackerHit3D, clupatra_new::Hit*> GHitof;
 RuntimeMap<clupatra_new::CluTrack*, MarlinTrk::IMarlinTrack*> MarTrkof;
 
 gear::GearMgr* gearMgr; 
@@ -285,7 +292,7 @@ StatusCode ClupatraAlg::execute() {
 	ZIndex zIndex( -driftLength , driftLength , _nZBins  ) ;
 
 
-	const edm4hep::TrackerHitCollection* col = nullptr;
+	const edm4hep::TrackerHit3DCollection* col = nullptr;
         debug() << "col" << endmsg;
 
 	try{   col = _TPCHitCollectionHandle.get();
@@ -546,7 +553,7 @@ StatusCode ClupatraAlg::execute() {
 
 				MarlinTrk::IMarlinTrack* mTrk = fitter( *icv ) ;
 				debug() << "before add hits and filter" << endmsg;
-                // std::vector<std::pair<edm4hep::TrackerHit, double> > hitsInFit ;
+                // std::vector<std::pair<edm4hep::TrackerHit3D, double> > hitsInFit ;
                 // mTrk->getHitsInFit( hitsInFit ) ;
                 // for (auto hit : hitsInFit) std::cout << hit.first << std::endl;
 
@@ -919,7 +926,7 @@ StatusCode ClupatraAlg::execute() {
 					//	std::copy( trk->getTrackerHits().begin() , trk->getTrackerHits().end() , std::back_inserter( hits ) ) ;
 
 					/*
-					   for( edm4hep::TrackerHitVec::const_iterator it = trk->getTrackerHits().begin() , END =  trk->getTrackerHits().end() ; it != END ; ++ it ){
+					   for( edm4hep::TrackerHit3DVec::const_iterator it = trk->getTrackerHits().begin() , END =  trk->getTrackerHits().end() ; it != END ; ++ it ){
 					   hits.addElement( GHitof(*it) )  ;
 					   }
 					   */

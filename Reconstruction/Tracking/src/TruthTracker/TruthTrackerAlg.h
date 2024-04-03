@@ -42,25 +42,25 @@ class TruthTrackerAlg: public GaudiAlgorithm
         void getTrackStateFromMcParticle(const edm4hep::MCParticleCollection*
                 mcParticleCol, edm4hep::TrackState& stat);
         int addSimHitsToTk(DataHandle<edm4hep::SimTrackerHitCollection>&
-                colHandle, edm4hep::TrackerHitCollection*& truthTrackerHitCol,
+                colHandle, edm4hep::TrackerHit3DCollection*& truthTrackerHitCol,
                 edm4hep::MutableTrack& track, const char* msg,int nHitAdded);
-        int smearDCTkhit(DataHandle<edm4hep::TrackerHitCollection>&
-                colHandle,DataHandle<edm4hep::TrackerHitCollection>& smearCol,
+        int smearDCTkhit(DataHandle<edm4hep::TrackerHit3DCollection>&
+                colHandle,DataHandle<edm4hep::TrackerHit3DCollection>& smearCol,
                 DataHandle<edm4hep::SimTrackerHitCollection>& SimDCHitCol,
                 DataHandle<edm4hep::SimTrackerHitCollection>& SimSmearDCHitCol,
                 DataHandle<edm4hep::MCRecoTrackerAssociationCollection>& AssoDCHitCol,
                 DataHandle<edm4hep::MCRecoTrackerAssociationCollection>& AssoSmearDCHitCol,
                 double resX, double resY, double resZ);
-        int addHitsToTk(DataHandle<edm4hep::TrackerHitCollection>&
+        int addHitsToTk(DataHandle<edm4hep::TrackerHit3DCollection>&
                 colHandle, edm4hep::MutableTrack& track, const char* msg,int nHitAdded);
-        int addIdealHitsToTk(DataHandle<edm4hep::TrackerHitCollection>&
-                colHandle, edm4hep::TrackerHitCollection*& truthTrackerHitCol,
+        int addIdealHitsToTk(DataHandle<edm4hep::TrackerHit3DCollection>&
+                colHandle, edm4hep::TrackerHit3DCollection*& truthTrackerHitCol,
                 edm4hep::MutableTrack& track, const char* msg,int nHitAdded);
 
         int addHotsToTk(edm4hep::Track& sourceTrack,edm4hep::MutableTrack&
                 targetTrack, int hitType,const char* msg,int nHitAdded);
         int nHotsOnTrack(edm4hep::Track& track, int hitType);
-        int trackerHitColSize(DataHandle<edm4hep::TrackerHitCollection>& hitCol);
+        int trackerHitColSize(DataHandle<edm4hep::TrackerHit3DCollection>& hitCol);
         int simTrackerHitColSize(DataHandle<edm4hep::SimTrackerHitCollection>& hitCol);
         bool getTrackStateFirstHit(
                 DataHandle<edm4hep::SimTrackerHitCollection>& dcSimTrackerHitCol,
@@ -75,20 +75,20 @@ class TruthTrackerAlg: public GaudiAlgorithm
         void getCircleFromPosMom(double pos[3],double mom[3],
                 double Bz,double q,double& helixRadius,double& helixXC,double& helixYC);
         int makeNoiseHit(edm4hep::SimTrackerHitCollection* SimVec,
-                edm4hep::TrackerHitCollection* Vec,
+                edm4hep::TrackerHit3DCollection* Vec,
                 edm4hep::MCRecoTrackerAssociationCollection* AssoVec,
-                const edm4hep::TrackerHitCollection* digiDCHitsCol,
+                const edm4hep::TrackerHit3DCollection* digiDCHitsCol,
                 const edm4hep::MCRecoTrackerAssociationCollection* assoHits);
-        bool debugNoiseHitsCol(edm4hep::TrackerHitCollection* Vec);
+        bool debugNoiseHitsCol(edm4hep::TrackerHit3DCollection* Vec);
 
             //reader
-            //        DataHandle<edm4hep::TrackerHitCollection> m_NoiseHitCol{
+            //        DataHandle<edm4hep::TrackerHit3DCollection> m_NoiseHitCol{
             //            "NoiseDCHitsCollection", Gaudi::DataHandle::Reader, this};
         DataHandle<edm4hep::MCParticleCollection> m_mcParticleCol{
             "MCParticle", Gaudi::DataHandle::Reader, this};
         DataHandle<edm4hep::SimTrackerHitCollection> m_DCSimTrackerHitCol{
             "DriftChamberHitsCollection", Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_DCDigiCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_DCDigiCol{
             "DigiDCHitCollection", Gaudi::DataHandle::Reader, this};
         DataHandle<edm4hep::MCRecoTrackerAssociationCollection>
             m_DCHitAssociationCol{ "DCHitAssociationCollection",
@@ -96,19 +96,19 @@ class TruthTrackerAlg: public GaudiAlgorithm
         DataHandle<edm4hep::TrackCollection>
             m_siSubsetTrackCol{ "SubsetTracks",
                 Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_SITSpacePointCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_SITSpacePointCol{
             "SITSpacePoints" , Gaudi::DataHandle::Reader, this};
-        //        DataHandle<edm4hep::TrackerHitCollection> m_SETSpacePointCol{
+        //        DataHandle<edm4hep::TrackerHit3DCollection> m_SETSpacePointCol{
         //            "SETSpacePoints" , Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_FTDSpacePointCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_FTDSpacePointCol{
             "FTDSpacePoints" , Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_VXDTrackerHits{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_VXDTrackerHits{
             "VXDTrackerHits" , Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_SETTrackerHits{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_SETTrackerHits{
             "SETTrackerHits" , Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_SITTrackerHits{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_SITTrackerHits{
             "SITTrackerHits" , Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_FTDTrackerHits{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_FTDTrackerHits{
             "FTDTrackerHits" , Gaudi::DataHandle::Reader, this};
         DataHandle<edm4hep::SimTrackerHitCollection> m_VXDCollection{
             "VXDCollection" , Gaudi::DataHandle::Reader, this};
@@ -123,20 +123,20 @@ class TruthTrackerAlg: public GaudiAlgorithm
             "DCTrackCollection", Gaudi::DataHandle::Writer, this};
         DataHandle<edm4hep::TrackCollection> m_SDTTrackCol{
             "SDTTrackCollection", Gaudi::DataHandle::Writer, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_truthTrackerHitCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_truthTrackerHitCol{
             "TruthTrackerHitCollection", Gaudi::DataHandle::Writer, this};
 
         // Smear hit
         DataHandle<edm4hep::SimTrackerHitCollection> w_SimSmearHCol{
             "SmearSimHitsCollection", Gaudi::DataHandle::Writer, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_SmeartruthTrackerHitCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_SmeartruthTrackerHitCol{
             "SmearTrackerHitCollection", Gaudi::DataHandle::Writer, this};
         DataHandle<edm4hep::MCRecoTrackerAssociationCollection> w_SmearAssociationCol{
             "SmearDCHitAssociationCollection", Gaudi::DataHandle::Writer, this};
         // make noise hit
         DataHandle<edm4hep::SimTrackerHitCollection> w_SimNoiseHCol{
             "NoiseSimHitsCollection", Gaudi::DataHandle::Writer, this};
-        DataHandle<edm4hep::TrackerHitCollection> w_NoiseHitCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> w_NoiseHitCol{
             "NoiseDCHitsCollection", Gaudi::DataHandle::Writer, this};
         DataHandle<edm4hep::MCRecoTrackerAssociationCollection> w_NoiseAssociationCol{
             "NoiseDCHitAssociationCollection", Gaudi::DataHandle::Writer, this};

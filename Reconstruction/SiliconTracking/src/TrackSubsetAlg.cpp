@@ -67,7 +67,7 @@ StatusCode TrackSubsetAlg::initialize() {
   }
 
   for(unsigned i=0; i<_trackerHitInputColNames.size(); i++){
-    _inTrackerHitColHdls.push_back(new DataHandle<edm4hep::TrackerHitCollection> (_trackerHitInputColNames[i], Gaudi::DataHandle::Reader, this));
+    _inTrackerHitColHdls.push_back(new DataHandle<edm4hep::TrackerHit3DCollection> (_trackerHitInputColNames[i], Gaudi::DataHandle::Reader, this));
   }
   /**********************************************************************************************/
   /*       Initialise the MarlinTrkSystem, needed by the tracks for fitting                     */
@@ -182,7 +182,7 @@ StatusCode TrackSubsetAlg::execute(){
     tracks_p.push_back(track);
     double qi = trackQI( track );
     debug() << "Track " << track->id() << " address " << track << "\t" << qi << "( ";
-    std::vector<edm4hep::TrackerHit> hits;
+    std::vector<edm4hep::TrackerHit3D> hits;
     std::copy(track->trackerHits_begin(), track->trackerHits_end(), std::back_inserter(hits));
     
     std::sort( hits.begin(), hits.end(), KiTrackMarlin::compare_TrackerHit_z );
@@ -230,8 +230,8 @@ StatusCode TrackSubsetAlg::execute(){
     
     auto track = accepted[i];
     
-    std::vector<edm4hep::TrackerHit> trackerHitsObj;
-    std::vector<edm4hep::TrackerHit> trackerHits;
+    std::vector<edm4hep::TrackerHit3D> trackerHitsObj;
+    std::vector<edm4hep::TrackerHit3D> trackerHits;
     std::copy(track->trackerHits_begin(), track->trackerHits_end(), std::back_inserter(trackerHitsObj));
 
     for(unsigned i=0; i<trackerHitsObj.size(); i++){
@@ -250,11 +250,11 @@ StatusCode TrackSubsetAlg::execute(){
     covMatrix[9]  = ( _initialTrackError_z0    ); //sigma_z0^2
     covMatrix[14] = ( _initialTrackError_tanL  ); //sigma_tanl^2
     
-    std::vector< std::pair<float, edm4hep::TrackerHit> > r2_values;
+    std::vector< std::pair<float, edm4hep::TrackerHit3D> > r2_values;
     r2_values.reserve(trackerHits.size());
     
-    for (std::vector<edm4hep::TrackerHit>::iterator it=trackerHits.begin(); it!=trackerHits.end(); ++it) {
-      edm4hep::TrackerHit h = *it;
+    for (std::vector<edm4hep::TrackerHit3D>::iterator it=trackerHits.begin(); it!=trackerHits.end(); ++it) {
+      edm4hep::TrackerHit3D h = *it;
       float r2 = h.getPosition()[0]*h.getPosition()[0]+h.getPosition()[1]*h.getPosition()[1];
       r2_values.push_back(std::make_pair(r2, *it));
     }
@@ -264,7 +264,7 @@ StatusCode TrackSubsetAlg::execute(){
     trackerHits.clear();
     trackerHits.reserve(r2_values.size());
     
-    for (std::vector< std::pair<float, edm4hep::TrackerHit> >::iterator it=r2_values.begin(); it!=r2_values.end(); ++it) {
+    for (std::vector< std::pair<float, edm4hep::TrackerHit3D> >::iterator it=r2_values.begin(); it!=r2_values.end(); ++it) {
       trackerHits.push_back(it->second);
     }
 
@@ -290,9 +290,9 @@ StatusCode TrackSubsetAlg::execute(){
     
     // Add hit numbers 
     
-    std::vector<std::pair<edm4hep::TrackerHit , double> > hits_in_fit ;
-    std::vector<std::pair<edm4hep::TrackerHit , double> > outliers ;
-    std::vector<edm4hep::TrackerHit> all_hits;
+    std::vector<std::pair<edm4hep::TrackerHit3D , double> > hits_in_fit ;
+    std::vector<std::pair<edm4hep::TrackerHit3D , double> > outliers ;
+    std::vector<edm4hep::TrackerHit3D> all_hits;
     //all_hits.reserve(300);
     
     //marlinTrk->getHitsInFit(hits_in_fit);

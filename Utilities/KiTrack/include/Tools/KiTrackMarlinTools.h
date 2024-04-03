@@ -7,7 +7,14 @@
 #include <map>
 //#include <sstream>
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 #include "edm4hep/Track.h"
 
 #include "ILDImpl/FTDHitSimple.h"
@@ -62,8 +69,8 @@ void saveToRoot( std::string rootFileName, std::string treeName , std::vector < 
  * 
  * @return true if |a.z| < |b.z| , i.e. true if a is nearer to z=0 than b is
  */
-//bool compare_TrackerHit_z( edm4hep::TrackerHit* a, edm4hep::TrackerHit* b );
-bool compare_TrackerHit_z( edm4hep::TrackerHit& a, edm4hep::TrackerHit& b );
+//bool compare_TrackerHit_z( edm4hep::TrackerHit3D* a, edm4hep::TrackerHit3D* b );
+bool compare_TrackerHit_z( edm4hep::TrackerHit3D& a, edm4hep::TrackerHit3D& b );
 
 /** method that compares two TrackerHits.
  * 
@@ -71,7 +78,7 @@ bool compare_TrackerHit_z( edm4hep::TrackerHit& a, edm4hep::TrackerHit& b );
  *
  * to be used at the VXD-SIT system
  */
-bool compare_TrackerHit_R( edm4hep::TrackerHit& a, edm4hep::TrackerHit& b );
+bool compare_TrackerHit_R( edm4hep::TrackerHit3D& a, edm4hep::TrackerHit3D& b );
 
 
 FTDHitSimple* createVirtualIPHit( int side , const SectorSystemFTD* sectorSystemFTD );
@@ -79,7 +86,7 @@ FTDHitSimple* createVirtualIPHit( int side , const SectorSystemFTD* sectorSystem
 VXDHitSimple* createVirtualIPHit( const SectorSystemVXD* sectorSystemVXD );
 
 
-std::string getPositionInfo( edm4hep::TrackerHit hit );
+std::string getPositionInfo( edm4hep::TrackerHit3D hit );
 
 std::string getPositionInfo( IHit* hit );   
 

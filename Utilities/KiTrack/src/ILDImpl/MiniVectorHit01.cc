@@ -11,7 +11,7 @@
 
 using namespace KiTrackMarlin;
 
-typedef std::vector<edm4hep::TrackerHit*> TrackerHitVec;
+typedef std::vector<edm4hep::TrackerHit3D*> TrackerHitVec;
 
 MiniVectorHit01::MiniVectorHit01( MiniVector* miniVector , const SectorSystemVXD* const sectorSystemVXD ){
    

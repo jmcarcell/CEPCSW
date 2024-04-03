@@ -786,7 +786,7 @@ void TrackCreator::TrackReachesECAL(const edm4hep::Track *const pTrack, PandoraA
     for (unsigned int i = 0; i < nTrackHits; ++i)
     {
         
-        const edm4hep::TrackerHit Hit ( pTrack->getTrackerHits(i) );
+        const edm4hep::TrackerHit3D Hit ( pTrack->getTrackerHits(i) );
         const edm4hep::Vector3d pos = Hit.getPosition();
         
         float x = float(pos[0]);

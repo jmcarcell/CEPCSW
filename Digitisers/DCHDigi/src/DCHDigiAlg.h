@@ -5,7 +5,14 @@
 #include "GaudiKernel/NTuple.h"
 #include "GaudiAlg/GaudiAlgorithm.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 #include "edm4hep/MCParticle.h"
 
@@ -102,7 +109,7 @@ protected:
   // Input collections
   DataHandle<edm4hep::SimTrackerHitCollection> r_SimDCHCol{"DriftChamberHitsCollection", Gaudi::DataHandle::Reader, this};
   // Output collections
-  DataHandle<edm4hep::TrackerHitCollection>    w_DigiDCHCol{"DigiDCHitCollection", Gaudi::DataHandle::Writer, this};
+  DataHandle<edm4hep::TrackerHit3DCollection>    w_DigiDCHCol{"DigiDCHitCollection", Gaudi::DataHandle::Writer, this};
   DataHandle<edm4hep::MCRecoTrackerAssociationCollection>    w_AssociationCol{"DCHitAssociationCollection", Gaudi::DataHandle::Writer, this};
 };
 

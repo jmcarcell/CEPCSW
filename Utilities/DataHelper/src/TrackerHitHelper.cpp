@@ -10,7 +10,7 @@
 #include "TVector3.h"
 #include "DD4hep/DD4hepUnits.h"
 
-std::array<float,6> CEPC::GetCovMatrix(edm4hep::TrackerHit& hit, bool useSpacePointBuilderMethod){
+std::array<float,6> CEPC::GetCovMatrix(edm4hep::TrackerHit3D& hit, bool useSpacePointBuilderMethod){
   if(hit.isAvailable()){
     int type = hit.getType();
     if(std::bitset<32>(type)[CEPCConf::TrkHitTypeBit::COMPOSITE_SPACEPOINT]){
@@ -34,7 +34,7 @@ std::array<float,6> CEPC::GetCovMatrix(edm4hep::TrackerHit& hit, bool useSpacePo
   return cov;
 }
 
-float CEPC::GetResolutionRPhi(edm4hep::TrackerHit& hit){
+float CEPC::GetResolutionRPhi(edm4hep::TrackerHit3D& hit){
   if(hit.isAvailable()){
     int type = hit.getType();
     if(std::bitset<32>(type)[CEPCConf::TrkHitTypeBit::COMPOSITE_SPACEPOINT]){
@@ -51,7 +51,7 @@ float CEPC::GetResolutionRPhi(edm4hep::TrackerHit& hit){
   return 0.;
 }
 
-float CEPC::GetResolutionZ(edm4hep::TrackerHit& hit){
+float CEPC::GetResolutionZ(edm4hep::TrackerHit3D& hit){
   if(hit.isAvailable()){
     int type = hit.getType();
     if(std::bitset<32>(type)[CEPCConf::TrkHitTypeBit::COMPOSITE_SPACEPOINT]){
@@ -120,7 +120,7 @@ std::array<float, 6> CEPC::ConvertToCovXYZ(float dU, float thetaU, float phiU, f
 
 const edm4hep::SimTrackerHit CEPC::getAssoClosestSimTrackerHit(
         const edm4hep::MCRecoTrackerAssociationCollection* assoHits,
-        const edm4hep::TrackerHit trackerHit,
+        const edm4hep::TrackerHit3D trackerHit,
         const dd4hep::DDSegmentation::GridDriftChamber* segmentation,
         int docaMehtod)
 {

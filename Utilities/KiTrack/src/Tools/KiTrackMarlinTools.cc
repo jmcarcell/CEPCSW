@@ -150,15 +150,15 @@ void KiTrackMarlin::saveToRoot( std::string rootFileName, std::string treeName ,
 }
 
 
-//bool KiTrackMarlin::compare_TrackerHit_z( edm4hep::TrackerHit a, edm4hep::TrackerHit b ){
+//bool KiTrackMarlin::compare_TrackerHit_z( edm4hep::TrackerHit3D a, edm4hep::TrackerHit3D b ){
 //  return ( fabs(a.getPosition()[2]) < fabs( b.getPosition()[2]) ); //compare their z values
 //}
 
-bool KiTrackMarlin::compare_TrackerHit_z( edm4hep::TrackerHit& a, edm4hep::TrackerHit& b ){
+bool KiTrackMarlin::compare_TrackerHit_z( edm4hep::TrackerHit3D& a, edm4hep::TrackerHit3D& b ){
   return ( fabs(a.getPosition()[2]) < fabs( b.getPosition()[2]) );
 }
 
-bool KiTrackMarlin::compare_TrackerHit_R( edm4hep::TrackerHit& a, edm4hep::TrackerHit& b ){
+bool KiTrackMarlin::compare_TrackerHit_R( edm4hep::TrackerHit3D& a, edm4hep::TrackerHit3D& b ){
   double Rad_a2 = (a.getPosition()[0]*a.getPosition()[0]) + (a.getPosition()[1]*a.getPosition()[1]) ;
   double Rad_b2 = (b.getPosition()[0]*b.getPosition()[0]) + (b.getPosition()[1]*b.getPosition()[1]) ;
   
@@ -197,7 +197,7 @@ VXDHitSimple* KiTrackMarlin::createVirtualIPHit( const SectorSystemVXD* sectorSy
 }
 
 
-std::string KiTrackMarlin::getPositionInfo( edm4hep::TrackerHit hit ){
+std::string KiTrackMarlin::getPositionInfo( edm4hep::TrackerHit3D hit ){
    
    std::stringstream info;
    
@@ -245,10 +245,10 @@ std::string KiTrackMarlin::getTrackHitInfo( ITrack* track){
 
 std::string KiTrackMarlin::getTrackHitInfo( edm4hep::Track* track){
   std::stringstream info;
-  //std::vector< edm4hep::TrackerHit > hits;
+  //std::vector< edm4hep::TrackerHit3D > hits;
   unsigned int nHits = track->trackerHits_size();
   for(unsigned i=0; i<nHits; i++){
-    edm4hep::TrackerHit hit = track->getTrackerHits(i);
+    edm4hep::TrackerHit3D hit = track->getTrackerHits(i);
     info << getPositionInfo(hit);
   }
    

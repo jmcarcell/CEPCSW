@@ -137,7 +137,7 @@ void VXDTrack::addHit( IMiniVector* MV ){
  	  
      for (TrackerHitVec::iterator it = HitVec.begin(); it != HitVec.end() ; ++it ){
 
-       edm4hep::TrackerHit *trkHit = *it ;   
+       edm4hep::TrackerHit3D *trkHit = *it ;   
        
        //_trkhits.push_back( trkHit );
      

@@ -73,11 +73,11 @@ class RecGenfitAlgSDT:public GaudiAlgorithm {
                 const edm4hep::TrackCollection* sdtRecTrackCol,
                 double eventStartTime,int nFittedSDT);
 
-        void selectHits(const edm4hep::Track&, std::vector<edm4hep::TrackerHit*>& dcDigiSelected);
+        void selectHits(const edm4hep::Track&, std::vector<edm4hep::TrackerHit3D*>& dcDigiSelected);
 
         DataHandle<edm4hep::EventHeaderCollection> m_headerCol{
             "EventHeaderCol", Gaudi::DataHandle::Reader, this};
-        DataHandle<edm4hep::TrackerHitCollection> m_DCDigiCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_DCDigiCol{
             "DigiDCHitCollection", Gaudi::DataHandle::Reader, this};
         //Mc truth
         DataHandle<edm4hep::SimTrackerHitCollection> m_simVXDHitCol{
@@ -128,7 +128,7 @@ class RecGenfitAlgSDT:public GaudiAlgorithm {
             "NoiseDCHitAssociationCollection", Gaudi::DataHandle::Reader, this};
 
         //Track Finding
-        DataHandle<edm4hep::TrackerHitCollection> m_DCTrackFindingCol{
+        DataHandle<edm4hep::TrackerHit3DCollection> m_DCTrackFindingCol{
             "DCTrackFindingHitCollection",Gaudi::DataHandle::Reader, this};
 
         //Output hits and particles

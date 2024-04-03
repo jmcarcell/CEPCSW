@@ -7,13 +7,20 @@
 #include "DD4hep/DetElement.h"
 #include "DD4hep/Segmentations.h"
 #include "DD4hep/DD4hepUnits.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 #include "edm4hep/SimTrackerHit.h"
 #include "TRandom.h"
 
 #include <iostream>
 
-GenfitHit::GenfitHit(const edm4hep::TrackerHit* trackerHit,
+GenfitHit::GenfitHit(const edm4hep::TrackerHit3D* trackerHit,
         const edm4hep::SimTrackerHit* simTrackerHit,
         const dd4hep::DDSegmentation::BitFieldCoder* decoder,
         const dd4hep::DDSegmentation::GridDriftChamber* gridDriftChamber,

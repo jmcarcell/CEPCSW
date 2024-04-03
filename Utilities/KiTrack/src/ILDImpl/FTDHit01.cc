@@ -6,7 +6,7 @@
 using namespace KiTrackMarlin;
 
 
-FTDHit01::FTDHit01( edm4hep::TrackerHit trackerHit , const SectorSystemFTD* const sectorSystemFTD ){
+FTDHit01::FTDHit01( edm4hep::TrackerHit3D trackerHit , const SectorSystemFTD* const sectorSystemFTD ){
    
    
    _sectorSystemFTD = sectorSystemFTD;

@@ -23,7 +23,14 @@ Steve Aplin 26 June 2009 (DESY)
 #include "k4FWCore/DataHandle.h"
 #include "edm4hep/EventHeaderCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/MCParticleCollection.h"
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 
@@ -164,9 +171,9 @@ protected:
 
   /** Output collection name.
    */
-  DataHandle<edm4hep::TrackerHitCollection> _TPCTrackerHitsColHdl{"TPCTrackerHits", Gaudi::DataHandle::Writer, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _TPCTrackerHitsColHdl{"TPCTrackerHits", Gaudi::DataHandle::Writer, this};
   DataHandle<edm4hep::MCRecoTrackerAssociationCollection> _TPCAssColHdl{"TPCTrackerHitAss", Gaudi::DataHandle::Writer, this};
-  edm4hep::TrackerHitCollection* _trkhitVec;
+  edm4hep::TrackerHit3DCollection* _trkhitVec;
   edm4hep::MCRecoTrackerAssociationCollection* _relCol;
 
   bool _use_raw_hits_to_store_simhit_pointer;

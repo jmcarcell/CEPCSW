@@ -109,7 +109,7 @@ class WireMeasurementDC : public genfit::AbsMeasurement{
   virtual bool isLeftRigthMeasurement() const {return true;}
   double getMaxDistance(){return maxDistance_;}
   int getLeftRightResolution() const override {return leftRight_;}
-  void setTrackerHit(const edm4hep::TrackerHit& trackerHit,int l,int c){
+  void setTrackerHit(const edm4hep::TrackerHit3D& trackerHit,int l,int c){
       trackerHit_=&trackerHit;
       layer_=l;
       cell_=c;
@@ -119,7 +119,7 @@ class WireMeasurementDC : public genfit::AbsMeasurement{
   }
   void print();
 
-  const edm4hep::TrackerHit* getTrackerHit(){return trackerHit_;}
+  const edm4hep::TrackerHit3D* getTrackerHit(){return trackerHit_;}
 
  protected:
 
@@ -131,7 +131,7 @@ class WireMeasurementDC : public genfit::AbsMeasurement{
   int layer_;
   int cell_;
   const edm4hep::SimTrackerHit* simTrackerHit_;
-  const edm4hep::TrackerHit* trackerHit_;
+  const edm4hep::TrackerHit3D* trackerHit_;
 
  public:
 

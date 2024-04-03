@@ -21,7 +21,14 @@
 #include "edm4hep/MCParticle.h"
 #include "edm4hep/MCParticleCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackCollection.h"
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 #include "edm4hep/ReconstructedParticle.h"
@@ -376,7 +383,7 @@ StatusCode RecGenfitAlgSDT::execute()
     auto assoDCHitsCol=m_DCHitAssociationCol.get();
     double eventStartTime=0;
 
-    const edm4hep::TrackerHitCollection* dCDigiCol=nullptr;
+    const edm4hep::TrackerHit3DCollection* dCDigiCol=nullptr;
     dCDigiCol=m_DCDigiCol.get();
 
     const edm4hep::TrackCollection* dcTrackCol=nullptr;
@@ -452,12 +459,12 @@ StatusCode RecGenfitAlgSDT::execute()
                         assoDCHitsCol,m_sigmaHitU,m_sigmaHitV);
             }else if(1==m_measurementTypeDC.value()){
                 if(m_selectDCHit){
-                    std::vector<edm4hep::TrackerHit*> selectedHits;
+                    std::vector<edm4hep::TrackerHit3D*> selectedHits;
                     selectHits(sdtTrack,selectedHits);
                     nHitAdded+=genfitTrack->addWireMeasurementsFromList(selectedHits,
                             m_sigmaHitU[0],assoDCHitsCol,m_sortMethod,m_truthAmbig,
                             m_skipCorner,m_skipNear);//mm
-                    std::vector<edm4hep::TrackerHit*> tmp;
+                    std::vector<edm4hep::TrackerHit3D*> tmp;
                     selectedHits.swap(tmp);
                 }else{
                     if(m_useNoiseDCHit){
@@ -716,7 +723,7 @@ void RecGenfitAlgSDT::debugEvent(const edm4hep::TrackCollection* sdtTrackCol,
         m_nSdtTrackHit = sdtTrack.trackerHits_size();
         if(sdtTrack.trackerHits_size()<1e-9) continue;
         for(int ihit=0;ihit<sdtTrack.trackerHits_size();ihit++){
-            edm4hep::TrackerHit sdtTrackHit = sdtTrack.getTrackerHits(ihit);
+            edm4hep::TrackerHit3D sdtTrackHit = sdtTrack.getTrackerHits(ihit);
         }
 
         //if(iSdtTrack>0) break;//TODO debug for some track only
@@ -822,7 +829,7 @@ void RecGenfitAlgSDT::debugEvent(const edm4hep::TrackCollection* sdtTrackCol,
     for(auto sdtRecTrack: *sdtRecTrackCol){
         for(int iHit=0;iHit<sdtRecTrack.trackerHits_size();iHit++)
         {
-            edm4hep::TrackerHit sdtRecTrackHit = sdtRecTrack.getTrackerHits(iHit);
+            edm4hep::TrackerHit3D sdtRecTrackHit = sdtRecTrack.getTrackerHits(iHit);
         }
         for(unsigned int i=0; i<sdtRecTrack.trackStates_size(); i++) {
             edm4hep::TrackState trackStat=sdtRecTrack.getTrackStates(i);
@@ -842,7 +849,7 @@ void RecGenfitAlgSDT::debugEvent(const edm4hep::TrackCollection* sdtTrackCol,
     }
 
     //debug digi
-    const edm4hep::TrackerHitCollection* dCDigiCol=nullptr;
+    const edm4hep::TrackerHit3DCollection* dCDigiCol=nullptr;
     dCDigiCol=m_DCDigiCol.get();
     if(nullptr!=dCDigiCol){ m_nDCDigi=dCDigiCol->size(); }
     int iDCDigi=0;
@@ -910,7 +917,7 @@ void RecGenfitAlgSDT::debugEvent(const edm4hep::TrackCollection* sdtTrackCol,
 }
 
 void RecGenfitAlgSDT::selectHits(const edm4hep::Track&,
-        std::vector<edm4hep::TrackerHit*>& dcDigiSelected)
+        std::vector<edm4hep::TrackerHit3D*>& dcDigiSelected)
 {
     //for single track only, FIXME
     double eventStartTime=0;
@@ -923,7 +930,7 @@ void RecGenfitAlgSDT::selectHits(const edm4hep::Track&,
     if(genfitTrack->createGenfitTrackFromMCParticle(
                 pidType,*(mcParticleCol->begin()),
                 eventStartTime)){
-        const edm4hep::TrackerHitCollection* dCDigiCol=nullptr;
+        const edm4hep::TrackerHit3DCollection* dCDigiCol=nullptr;
         dCDigiCol=m_DCDigiCol.get();
         int iDCDigi=0;
         for(auto dcDigi:*dCDigiCol){
@@ -959,7 +966,7 @@ void RecGenfitAlgSDT::selectHits(const edm4hep::Track&,
                 debug()<<"Skip hit delta doca "<<fabs(docaExt-docaMC)<<endmsg;
                 continue;
             }
-            edm4hep::TrackerHit* thisDigi = new edm4hep::TrackerHit(dcDigi);
+            edm4hep::TrackerHit3D* thisDigi = new edm4hep::TrackerHit3D(dcDigi);
             dcDigiSelected.push_back(thisDigi);
             iDCDigi++;
         }//end loop over digi

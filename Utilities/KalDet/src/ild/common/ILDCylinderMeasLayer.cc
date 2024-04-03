@@ -10,7 +10,14 @@
 #include "ILDCylinderHit.h"
 
 #include <lcio.h>
-#include <edm4hep/TrackerHit.h>
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
+#include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 //#include <EVENT/TrackerHitZCylinder.h>
 
 #include "GaudiKernel/CommonMessaging.h"
@@ -110,7 +117,7 @@ void ILDCylinderMeasLayer::CalcDhDa(const TVTrackHit &vht, // tracker hit not us
 
 /** Convert LCIO Tracker Hit to an ILDCylinderHit  */
 
-ILDVTrackHit* ILDCylinderMeasLayer::ConvertLCIOTrkHit(edm4hep::TrackerHit trkhit) const {
+ILDVTrackHit* ILDCylinderMeasLayer::ConvertLCIOTrkHit(edm4hep::TrackerHit3D trkhit) const {
   if ( ! trkhit.isAvailable() ) {
     // streamlog_out(ERROR) << "ILDCylinderMeasLayer::ConvertLCIOTrkHit trkhit pointer is NULL" << std::endl;
     return NULL;

@@ -54,7 +54,7 @@ inline float getPhi(const edm4hep::Track &track) {
 }
 
 
-inline int getLayer(const edm4hep::TrackerHit hit) {
+inline int getLayer(const edm4hep::TrackerHit3D hit) {
     UTIL::BitField64* _encoder = new UTIL::BitField64(lcio::ILDCellID0::encoder_string);
     _encoder->setValue(hit.getCellID());
     int layer = (*_encoder)[lcio::ILDCellID0::layer];

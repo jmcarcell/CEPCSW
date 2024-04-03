@@ -5,7 +5,14 @@
 #include "GaudiAlg/GaudiAlgorithm.h"
 
 #include "edm4hep/TrackCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 //#include "edm4hep/Track.h"
 #include "TrackSystemSvc/IMarlinTrkSystem.h"
 #include "Tracking/ITrackFitterTool.h"
@@ -60,7 +67,7 @@ class TrackSubsetAlg : public GaudiAlgorithm {
   ToolHandle<ITrackFitterTool> m_fitTool;
   /* Input collection */
   std::vector<DataHandle<edm4hep::TrackCollection>* > _inTrackColHdls;
-  std::vector<DataHandle<edm4hep::TrackerHitCollection>* > _inTrackerHitColHdls;
+  std::vector<DataHandle<edm4hep::TrackerHit3DCollection>* > _inTrackerHitColHdls;
   /* Output collection */
   DataHandle<edm4hep::TrackCollection> _outColHdl{"SubsetTracks", Gaudi::DataHandle::Writer, this};
   

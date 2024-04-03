@@ -6,7 +6,14 @@
 #include <gsl/gsl_rng.h>
 #include "edm4hep/EventHeaderCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 
 /** ======= PlanarDigiProcessor / PlanarDigiAlg ========== <br>
@@ -92,7 +99,7 @@ protected:
   DataHandle<edm4hep::EventHeaderCollection> _headerCol{"EventHeaderCol", Gaudi::DataHandle::Reader, this};
   DataHandle<edm4hep::SimTrackerHitCollection> _inColHdl{"VXDCollection", Gaudi::DataHandle::Reader, this};
   // Output collections
-  DataHandle<edm4hep::TrackerHitCollection> _outColHdl{"VXDTrackerHits", Gaudi::DataHandle::Writer, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _outColHdl{"VXDTrackerHits", Gaudi::DataHandle::Writer, this};
   DataHandle<edm4hep::MCRecoTrackerAssociationCollection> _outRelColHdl{"VXDTrackerHitRelations", Gaudi::DataHandle::Writer, this};
 };
 

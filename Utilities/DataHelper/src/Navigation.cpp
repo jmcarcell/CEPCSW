@@ -1,7 +1,14 @@
 #include "DataHelper/Navigation.h"
 
 #include "edm4hep/SimTrackerHit.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 Navigation* Navigation::m_fNavigation = nullptr;
 
@@ -19,16 +26,16 @@ Navigation::~Navigation(){
 void Navigation::Initialize(){
   m_hitColVec.clear();
   m_assColVec.clear();
-  for(std::map<int, edm4hep::TrackerHit>::iterator it=m_trkHits.begin();it!=m_trkHits.end();it++){
+  for(std::map<int, edm4hep::TrackerHit3D>::iterator it=m_trkHits.begin();it!=m_trkHits.end();it++){
     // delete it->second;
   }
   m_trkHits.clear();
 }
 
 #if EDM4HEP_BUILD_VERSION <= EDM4HEP_VERSION(0, 10, 5)
-edm4hep::TrackerHit Navigation::GetTrackerHit(const edm4hep::ObjectID& obj_id, bool delete_by_caller){
+edm4hep::TrackerHit3D Navigation::GetTrackerHit(const edm4hep::ObjectID& obj_id, bool delete_by_caller){
 #else
-edm4hep::TrackerHit Navigation::GetTrackerHit(const podio::ObjectID& obj_id, bool delete_by_caller){
+edm4hep::TrackerHit3D Navigation::GetTrackerHit(const podio::ObjectID& obj_id, bool delete_by_caller){
 #endif
   int id = obj_id.collectionID * 10000000 + obj_id.index;
   if(!delete_by_caller){
@@ -51,7 +58,7 @@ edm4hep::TrackerHit Navigation::GetTrackerHit(const podio::ObjectID& obj_id, boo
       auto this_id = hit.getObjectID();
       if(this_id.collectionID!=obj_id.collectionID)break;
       else if(this_id.index==obj_id.index){
-	edm4hep::TrackerHit hit_copy = edm4hep::TrackerHit(hit);
+	edm4hep::TrackerHit3D hit_copy = edm4hep::TrackerHit3D(hit);
 	if(!delete_by_caller) m_trkHits[id] = hit_copy;
 	return hit_copy;//&(m_trkHits[id]);
       }
@@ -77,7 +84,7 @@ std::vector<edm4hep::SimTrackerHit> Navigation::GetRelatedTrackerHit(const podio
   return hits;
 }
 
-std::vector<edm4hep::SimTrackerHit> Navigation::GetRelatedTrackerHit(const edm4hep::TrackerHit& hit){
+std::vector<edm4hep::SimTrackerHit> Navigation::GetRelatedTrackerHit(const edm4hep::TrackerHit3D& hit){
   std::vector<edm4hep::SimTrackerHit> hits;
   for(int i=0;i<m_assColVec.size();i++){
     for(auto ass : *m_assColVec[i]){
@@ -88,7 +95,7 @@ std::vector<edm4hep::SimTrackerHit> Navigation::GetRelatedTrackerHit(const edm4h
   return hits;
 }
 
-std::vector<edm4hep::SimTrackerHit> Navigation::GetRelatedTrackerHit(const edm4hep::TrackerHit& hit, const edm4hep::MCRecoTrackerAssociationCollection* col){
+std::vector<edm4hep::SimTrackerHit> Navigation::GetRelatedTrackerHit(const edm4hep::TrackerHit3D& hit, const edm4hep::MCRecoTrackerAssociationCollection* col){
   std::vector<edm4hep::SimTrackerHit> hits;
   for(auto ass : *col){
     if(ass.getRec().getObjectID().collectionID != hit.getObjectID().collectionID) break;

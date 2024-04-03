@@ -6,7 +6,14 @@
 //#include "edm4hep/EventHeaderCollection.h"
 #include "edm4hep/MCParticleCollection.h"
 #include "edm4hep/SimTrackerHitCollection.h"
+#if __has_include("edm4hep/TrackerHit3DCollection.h")
+#include "edm4hep/TrackerHit3DCollection.h"
+#else
 #include "edm4hep/TrackerHitCollection.h"
+namespace edm4hep {
+  using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+} // namespace edm4hep
+#endif
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 
 #include "CLHEP/Vector/ThreeVector.h"
@@ -73,10 +80,10 @@ class SpacePointBuilderAlg : public GaudiAlgorithm {
  protected:
   // Input collection
   DataHandle<edm4hep::MCParticleCollection> _inMCColHdl{"MCParticle", Gaudi::DataHandle::Reader, this};
-  DataHandle<edm4hep::TrackerHitCollection> _inHitColHdl{"FTDStripTrackerHits", Gaudi::DataHandle::Reader, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _inHitColHdl{"FTDStripTrackerHits", Gaudi::DataHandle::Reader, this};
   DataHandle<edm4hep::MCRecoTrackerAssociationCollection> _inHitAssColHdl{"FTDStripTrackerHitsAssociation", Gaudi::DataHandle::Reader, this};
   // Output collection
-  DataHandle<edm4hep::TrackerHitCollection> _outSPColHdl{"FTDSpacePoints", Gaudi::DataHandle::Writer, this};
+  DataHandle<edm4hep::TrackerHit3DCollection> _outSPColHdl{"FTDSpacePoints", Gaudi::DataHandle::Writer, this};
   DataHandle<edm4hep::MCRecoTrackerAssociationCollection> _outSPAssColHdl{"FTDSpacePointsAssociation", Gaudi::DataHandle::Writer, this};
 
   Gaudi::Property<float> _nominal_vertex_x{this, "NominalVertexX", 0.0};
@@ -144,7 +151,7 @@ class SpacePointBuilderAlg : public GaudiAlgorithm {
   
   
   /** @return a spacepoint (in the form of a TrackerHitImpl* ) created from two TrackerHitPlane* which stand for si-strips */
-  edm4hep::MutableTrackerHit createSpacePoint( edm4hep::TrackerHit a , edm4hep::TrackerHit b, double stripLength );
+  edm4hep::MutableTrackerHit createSpacePoint( edm4hep::TrackerHit3D a , edm4hep::TrackerHit3D b, double stripLength );
   
 //   TrackerHitImpl* createSpacePointOld( TrackerHitPlane* a , TrackerHitPlane* b );
   

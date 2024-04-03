@@ -3,7 +3,14 @@
 
 #include "edm4hep/Track.h"
 #include "edm4hep/MutableTrack.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 class FTDHelixFitterException : public std::exception {
  protected:
@@ -34,7 +41,7 @@ class FTDHelixFitter{
  public:
    
   FTDHelixFitter( edm4hep::MutableTrack* track ) ;
-  FTDHelixFitter( std::vector<edm4hep::TrackerHit> trackerHits ) ;
+  FTDHelixFitter( std::vector<edm4hep::TrackerHit3D> trackerHits ) ;
    
    
    double getChi2(){ return _chi2; }
@@ -59,7 +66,7 @@ class FTDHelixFitter{
    float _d0;
    float _z0;
    
-   std::vector< edm4hep::TrackerHit > _trackerHits;
+   std::vector< edm4hep::TrackerHit3D > _trackerHits;
      
 };
 

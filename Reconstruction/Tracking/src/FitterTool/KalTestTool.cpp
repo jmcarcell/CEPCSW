@@ -8,7 +8,14 @@
 #include "DD4hep/Detector.h"
 #include "DD4hep/DD4hepUnits.h"
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 #include "edm4hep/TrackState.h"
 #include "edm4hep/MutableTrack.h"
 
@@ -58,7 +65,7 @@ StatusCode KalTestTool::finalize() {
   return sc;
 }
 
-int KalTestTool::Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit>& trackHits,
+int KalTestTool::Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit3D>& trackHits,
 			  const decltype(edm4hep::TrackState::covMatrix)& covMatrix, double maxChi2perHit, bool backward) {
   if (m_hitsInFit.size()!=0 || m_outliers.size()!=0) {
     error() << "Important! vector not clear, still store the data of last event!" << endmsg;
@@ -80,7 +87,7 @@ int KalTestTool::Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHi
   return 0;
 }
 
-int KalTestTool::Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit>& trackHits,
+int KalTestTool::Fit(edm4hep::MutableTrack track, std::vector<edm4hep::TrackerHit3D>& trackHits,
                           edm4hep::TrackState trackState, double maxChi2perHit, bool backward) {
   if (m_hitsInFit.size()!=0 || m_outliers.size()!=0) {
     error() << "Important! vector not clear, still store the data of last event!" << endmsg;

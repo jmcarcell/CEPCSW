@@ -5,7 +5,14 @@
 #include "DataHelper/Navigation.h"
 #include "DataHelper/TrackerHitHelper.h"
 #include "edm4hep/MCParticle.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 //#include "edm4hep/TrackerHitPlane.h"
 #include "edm4hep/Track.h"
 #include "edm4hep/TrackState.h"
@@ -475,7 +482,7 @@ int SiliconTrackingAlg::InitialiseFTD() {
   
   // Reading in FTD Pixel Hits Collection
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  const edm4hep::TrackerHitCollection* hitFTDPixelCol = nullptr;
+  const edm4hep::TrackerHit3DCollection* hitFTDPixelCol = nullptr;
   try {
     hitFTDPixelCol = _inFTDPixelColHdl.get();
   }
@@ -574,7 +581,7 @@ int SiliconTrackingAlg::InitialiseFTD() {
   }
   // Reading out FTD SpacePoint Collection
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  const edm4hep::TrackerHitCollection* hitFTDSpacePointCol = nullptr;
+  const edm4hep::TrackerHit3DCollection* hitFTDSpacePointCol = nullptr;
   try {
     hitFTDSpacePointCol = _inFTDSpacePointColHdl.get();
   }
@@ -583,7 +590,7 @@ int SiliconTrackingAlg::InitialiseFTD() {
     //success = 0;
   }
 
-  const edm4hep::TrackerHitCollection* rawHitCol = nullptr;
+  const edm4hep::TrackerHit3DCollection* rawHitCol = nullptr;
   if(hitFTDSpacePointCol){
     try{
       rawHitCol = _inFTDRawColHdl.get();
@@ -608,7 +615,7 @@ int SiliconTrackingAlg::InitialiseFTD() {
     
     //for (int ielem=0; ielem<nelem; ++ielem) {
     for(auto hit : *hitFTDSpacePointCol){
-    //edm4hep::TrackerHit hit =  hitFTDSpacePointCol->at(ielem);
+    //edm4hep::TrackerHit3D hit =  hitFTDSpacePointCol->at(ielem);
       
       TrackerHitExtended * hitExt = new TrackerHitExtended(hit);
       
@@ -700,7 +707,7 @@ int SiliconTrackingAlg::InitialiseVTX() {
   int success = 1;
   // Reading out VTX Hits Collection
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
-  const edm4hep::TrackerHitCollection* hitVTXCol = nullptr;
+  const edm4hep::TrackerHit3DCollection* hitVTXCol = nullptr;
   try {
     hitVTXCol = _inVTXColHdl.get();
   }
@@ -783,7 +790,7 @@ int SiliconTrackingAlg::InitialiseVTX() {
   }
   
   if (_useSIT > 0 ) {
-    const edm4hep::TrackerHitCollection* hitSITCol = nullptr;
+    const edm4hep::TrackerHit3DCollection* hitSITCol = nullptr;
     try {
       hitSITCol = _inSITColHdl.get();
     }
@@ -792,7 +799,7 @@ int SiliconTrackingAlg::InitialiseVTX() {
       success = 0;
     }
 
-    const edm4hep::TrackerHitCollection* rawHitCol = nullptr;
+    const edm4hep::TrackerHit3DCollection* rawHitCol = nullptr;
     if(hitSITCol){
       try{
 	rawHitCol = _inSITRawColHdl.get();
@@ -832,7 +839,7 @@ int SiliconTrackingAlg::InitialiseVTX() {
         //    iv)  TrackerHitZCylinder 
         //    v)   Must be standard TrackerHit
         
-	//const edm4hep::TrackerHit trkhit = hitSITCol->at(ielem);
+	//const edm4hep::TrackerHit3D trkhit = hitSITCol->at(ielem);
         int layer = getLayerID(trkhit);
         
         // VXD and SIT are treated as one system so SIT layers start from _nLayersVTX
@@ -1577,7 +1584,7 @@ int SiliconTrackingAlg::BuildTrack(TrackerHitExtended * outerHit,
       float epar[15];
       
       for (int ih=0;ih<nHits;++ih) {
-	edm4hep::TrackerHit trkHit = hvec[ih]->getTrackerHit();
+	edm4hep::TrackerHit3D trkHit = hvec[ih]->getTrackerHit();
         xh[ih] = trkHit.getPosition()[0];
         yh[ih] = trkHit.getPosition()[1];
         zh[ih] = float(trkHit.getPosition()[2]);
@@ -1588,7 +1595,7 @@ int SiliconTrackingAlg::BuildTrack(TrackerHitExtended * outerHit,
         if (ph[ih] < 0.) 
           ph[ih] = TWOPI + ph[ih]; 
       }      
-      edm4hep::TrackerHit assignedTrkHit = assignedhit->getTrackerHit();
+      edm4hep::TrackerHit3D assignedTrkHit = assignedhit->getTrackerHit();
       xh[nHits] = assignedTrkHit.getPosition()[0];
       yh[nHits] = assignedTrkHit.getPosition()[1];
       zh[nHits] = float(assignedTrkHit.getPosition()[2]);
@@ -1695,7 +1702,7 @@ void SiliconTrackingAlg::CreateTrack(TrackExtended * trackAR ) {
   
   for (int i=0; i<nHits; ++i) {
     TrackExtendedVec& trackVec = hitVec[i]->getTrackExtendedVec();
-    //edm4hep::TrackerHit trkHit = hitVec[i]->getTrackerHit();
+    //edm4hep::TrackerHit3D trkHit = hitVec[i]->getTrackerHit();
     //debug() << "Hit " << trkHit.id().collectionID << "-" << trkHit.id().index << endmsg;
     if (trackVec.size() != 0) {
       //debug() << "    used in TrackExtended " << endmsg;
@@ -1737,7 +1744,7 @@ void SiliconTrackingAlg::CreateTrack(TrackExtended * trackAR ) {
       float epar[15];
       float refPoint[3] = {0.,0.,0.};
       for (int ih=0;ih<nHits;++ih) {
-	edm4hep::TrackerHit trkHit = hitVec[ih]->getTrackerHit();
+	edm4hep::TrackerHit3D trkHit = hitVec[ih]->getTrackerHit();
         float rR = hitVec[ih]->getResolutionRPhi();
         float rZ = hitVec[ih]->getResolutionZ();
         if (int(hitVec[ih]->getTrackExtendedVec().size()) != 0)
@@ -1751,7 +1758,7 @@ void SiliconTrackingAlg::CreateTrack(TrackExtended * trackAR ) {
         ph[ih] = float(atan2(yh[ih],xh[ih]));
       }      
       for (int ih=0;ih<nHitsOld;++ih) {
-	edm4hep::TrackerHit trkHit = hitVecOld[ih]->getTrackerHit();
+	edm4hep::TrackerHit3D trkHit = hitVecOld[ih]->getTrackerHit();
 	//debug() << "old track's hit " << trkHit.id().collectionID << " " << trkHit.id().index << endmsg;
         xh[ih+nHits] = trkHit.getPosition()[0];
         yh[ih+nHits] = trkHit.getPosition()[1];
@@ -1958,7 +1965,7 @@ void SiliconTrackingAlg::AttachRemainingVTXHitsFast() {
           TrackerHitExtended * hitExt = hitVec[iH];
           TrackExtendedVec& trackVec = hitExt->getTrackExtendedVec();
           if (trackVec.size()==0) {
-	    edm4hep::TrackerHit hit = hitExt->getTrackerHit();
+	    edm4hep::TrackerHit3D hit = hitExt->getTrackerHit();
             double pos[3];
             double radius = 0;
             for (int i=0; i<3; ++i) {
@@ -2022,8 +2029,8 @@ void SiliconTrackingAlg::AttachRemainingVTXHitsFast() {
                 for (int IHIT=0;IHIT<NHITS;++IHIT) {
                   
                   // Here we are trying to find if a hits are too close i.e. closer than _minDistToDelta
-		  edm4hep::TrackerHit trkhit1 = hit->getTrackerHit();
-		  edm4hep::TrackerHit trkhit2 = hitVector[IHIT]->getTrackerHit();                  
+		  edm4hep::TrackerHit3D trkhit1 = hit->getTrackerHit();
+		  edm4hep::TrackerHit3D trkhit2 = hitVector[IHIT]->getTrackerHit();                  
                   
                   if ( trkhit1.getCellID() == trkhit2.getCellID() ){ // i.e. they are in the same sensor
                     float distance = 0.;
@@ -2131,8 +2138,8 @@ void SiliconTrackingAlg::AttachRemainingVTXHitsSlow() {
           for (int IHIT=0;IHIT<NHITS;++IHIT) {
             
             // Here we are trying to find if a hits are too close i.e. closer than _minDistToDelta
-	    edm4hep::TrackerHit trkhit1 = hit->getTrackerHit();
-	    edm4hep::TrackerHit trkhit2 = hitVector[IHIT]->getTrackerHit();                  
+	    edm4hep::TrackerHit3D trkhit1 = hit->getTrackerHit();
+	    edm4hep::TrackerHit3D trkhit2 = hitVector[IHIT]->getTrackerHit();                  
 	    
             if ( trkhit1.getCellID() == trkhit2.getCellID() ){ // i.e. they are in the same sensor
               
@@ -2492,7 +2499,7 @@ int SiliconTrackingAlg::BuildTrackFTD(TrackExtended * trackAR, int * nLR, int iS
         int nH = int(hitVec.size());
         for (int iH=0; iH<nH; ++iH) {
           TrackerHitExtended * hit = hitVec[iH];
-	  edm4hep::TrackerHit trkHit = hit->getTrackerHit();
+	  edm4hep::TrackerHit3D trkHit = hit->getTrackerHit();
           float pos[3];
           for (int i=0;i<3;++i)
             pos[i] = float(trkHit.getPosition()[i]);
@@ -2535,7 +2542,7 @@ int SiliconTrackingAlg::AttachHitToTrack(TrackExtended * trackAR, TrackerHitExte
   float epar[15];
   
   for (int i=0; i<nHits; ++i) {
-    edm4hep::TrackerHit trkHit = hitVec[i]->getTrackerHit();
+    edm4hep::TrackerHit3D trkHit = hitVec[i]->getTrackerHit();
     xh[i] = double(trkHit.getPosition()[0]);
     yh[i] = double(trkHit.getPosition()[1]);
     zh[i] = float(trkHit.getPosition()[2]);
@@ -2547,7 +2554,7 @@ int SiliconTrackingAlg::AttachHitToTrack(TrackExtended * trackAR, TrackerHitExte
     wzh[i] = 1.0/(rZ*rZ);
   }
   
-  edm4hep::TrackerHit trkHit = hit->getTrackerHit();
+  edm4hep::TrackerHit3D trkHit = hit->getTrackerHit();
   xh[nHits] = double(trkHit.getPosition()[0]);
   yh[nHits] = double(trkHit.getPosition()[1]);
   zh[nHits] = float(trkHit.getPosition()[2]);
@@ -2678,7 +2685,7 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
         lh[ihit] = 1; // only hits which have lh=1 will be used for the fit
         
         // get the pointer to the lcio trackerhit for this hit
-	edm4hep::TrackerHit trkHit = hitVec[ihit]->getTrackerHit();
+	edm4hep::TrackerHit3D trkHit = hitVec[ihit]->getTrackerHit();
         
         int det = getDetectorID(trkHit);
         
@@ -2692,7 +2699,7 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
           for (int lhit=0;lhit<ihit;++lhit) {
             
             // get the pointer to the lcio trackerhit for the previously checked hit
-	    edm4hep::TrackerHit trkHitS = hitVec[lhit]->getTrackerHit();
+	    edm4hep::TrackerHit3D trkHitS = hitVec[lhit]->getTrackerHit();
             
             
             //          int layerS = getLayerID(trkHitS);
@@ -2759,11 +2766,11 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       
       int nFit = 0;
       for (int i=0; i<nHits; ++i) {
-	edm4hep::TrackerHit trkHit = hitVec[i]->getTrackerHit();
+	edm4hep::TrackerHit3D trkHit = hitVec[i]->getTrackerHit();
 	debug() << "TrackerHit " << i << " id = " << trkHit.id().collectionID << "-" << trkHit.id().index << endmsg;
         // check if the hit has been rejected as being on the same layer and further from the helix lh==0
         if (lh[i] == 1) {
-	  //edm4hep::TrackerHit trkHit = hitVec[i]->getTrackerHit();
+	  //edm4hep::TrackerHit3D trkHit = hitVec[i]->getTrackerHit();
 	  debug() << "                  accept" << endmsg;
           nFit++;
           if(trkHit.isAvailable()) { 
@@ -2807,11 +2814,11 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       covMatrix[14] = ( _initialTrackError_tanL  ); //sigma_tanl^2
       
       
-      std::vector< std::pair<float, edm4hep::TrackerHit> > r2_values;
+      std::vector< std::pair<float, edm4hep::TrackerHit3D> > r2_values;
       r2_values.reserve(trkHits.size());
       
-      for (std::vector<edm4hep::TrackerHit>::iterator it=trkHits.begin(); it!=trkHits.end(); ++it) {
-        edm4hep::TrackerHit h = *it;
+      for (std::vector<edm4hep::TrackerHit3D>::iterator it=trkHits.begin(); it!=trkHits.end(); ++it) {
+        edm4hep::TrackerHit3D h = *it;
         float r2 = h.getPosition()[0]*h.getPosition()[0]+h.getPosition()[1]*h.getPosition()[1];
         r2_values.push_back(std::make_pair(r2, *it));
       }
@@ -2821,7 +2828,7 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       trkHits.clear();
       trkHits.reserve(r2_values.size());
 
-      for (std::vector< std::pair<float, edm4hep::TrackerHit> >::iterator it=r2_values.begin(); it!=r2_values.end(); ++it) {
+      for (std::vector< std::pair<float, edm4hep::TrackerHit3D> >::iterator it=r2_values.begin(); it!=r2_values.end(); ++it) {
         trkHits.push_back(it->second);
       }
 
@@ -2849,9 +2856,9 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
 #endif
       */
       
-      std::vector<std::pair<edm4hep::TrackerHit , double> > hits_in_fit ;  
-      std::vector<std::pair<edm4hep::TrackerHit , double> > outliers ;
-      std::vector<edm4hep::TrackerHit> all_hits;    
+      std::vector<std::pair<edm4hep::TrackerHit3D , double> > hits_in_fit ;  
+      std::vector<std::pair<edm4hep::TrackerHit3D , double> > outliers ;
+      std::vector<edm4hep::TrackerHit3D> all_hits;    
 
       UTIL::BitField64 cellID_encoder( UTIL::ILDCellID0::encoder_string ) ;
 
@@ -2859,7 +2866,7 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       hits_in_fit = m_fitTool->GetHitsInFit();
 
       for ( unsigned ihit = 0; ihit < hits_in_fit.size(); ++ihit) {
-	edm4hep::TrackerHit hit = hits_in_fit[ihit].first;
+	edm4hep::TrackerHit3D hit = hits_in_fit[ihit].first;
         //all_hits.push_back(hit);//hits_in_fit[ihit].first);
 	if (m_tupleDebug) {
 	  cellID_encoder.setValue(hit.getCellID());

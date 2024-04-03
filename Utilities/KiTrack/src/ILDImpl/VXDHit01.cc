@@ -12,7 +12,7 @@
 using namespace KiTrackMarlin;
 
 
-VXDHit01::VXDHit01( edm4hep::TrackerHit* trackerHit , const SectorSystemVXD* const sectorSystemVXD ){
+VXDHit01::VXDHit01( edm4hep::TrackerHit3D* trackerHit , const SectorSystemVXD* const sectorSystemVXD ){
    
    
    _sectorSystemVXD = sectorSystemVXD;

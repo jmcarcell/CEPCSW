@@ -107,7 +107,7 @@ StatusCode DCHDigiAlg::execute()
 
   info() << "Processing " << _nEvt << " events " << endmsg;
   if(m_WriteAna) m_evt = _nEvt;
-  edm4hep::TrackerHitCollection* Vec   = w_DigiDCHCol.createAndPut();
+  edm4hep::TrackerHit3DCollection* Vec   = w_DigiDCHCol.createAndPut();
   edm4hep::MCRecoTrackerAssociationCollection* AssoVec   = w_AssociationCol.createAndPut();
   const edm4hep::SimTrackerHitCollection* SimHitCol =  r_SimDCHCol.get();
   if (SimHitCol->size() == 0) {

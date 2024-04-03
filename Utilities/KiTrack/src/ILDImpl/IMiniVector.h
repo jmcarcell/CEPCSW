@@ -3,7 +3,14 @@
 
 #include <iostream>
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 #include "KiTrack/IHit.h"
 #include "ILDImpl/MiniVector.h"

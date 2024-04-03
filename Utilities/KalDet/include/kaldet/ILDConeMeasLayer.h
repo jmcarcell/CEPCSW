@@ -21,7 +21,14 @@
 #include "iostream"
 /* #include "streamlog/streamlog.h" */
 #include "UTIL/ILDConf.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 class ILDConeMeasLayer : public ILDVMeasLayer, public TCutCone {
 public:
@@ -60,7 +67,7 @@ public:
    Bool_t IsOnSurface(const TVector3 &xx) const;
 
    /** Convert LCIO Tracker Hit to an ILDCylinderHit  */
-   virtual ILDVTrackHit* ConvertLCIOTrkHit(edm4hep::TrackerHit trkhit) const {
+   virtual ILDVTrackHit* ConvertLCIOTrkHit(edm4hep::TrackerHit3D trkhit) const {
       
       /* streamlog_out( ERROR ) << "Don't use this, it's not implemented!"; */
       return NULL;

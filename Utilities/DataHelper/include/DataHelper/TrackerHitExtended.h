@@ -3,7 +3,14 @@
 
 //#include "lcio.h"
 //#include "EVENT/LCIO.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 //#include "TrackExtended.h"
 #include <vector>
 
@@ -24,14 +31,14 @@ class TrackerHitExtended {
   
  public:
   
-  TrackerHitExtended(const edm4hep::TrackerHit trackerhit);
+  TrackerHitExtended(const edm4hep::TrackerHit3D trackerhit);
   ~TrackerHitExtended();
   void setTrackExtended(TrackExtended * trackAR);
     void addTrackExtended(TrackExtended * trackAR);
     void setTrackerHitTo(TrackerHitExtended * hitTo);
     void setTrackerHitFrom(TrackerHitExtended * hitFrom);
     void setGenericDistance(float genericDistance);
-    //void setTrackerHit(edm4hep::TrackerHit hit);
+    //void setTrackerHit(edm4hep::TrackerHit3D hit);
     void setYresTo(float yresTo);
     void setYresFrom(float yresFrom);
     void setDirVec(float * dirVec);
@@ -42,7 +49,7 @@ class TrackerHitExtended {
     void setDet(int idet);
     void setUsedInFit(bool usedInFit);
 
-    edm4hep::TrackerHit getTrackerHit();
+    edm4hep::TrackerHit3D getTrackerHit();
     TrackExtended * getTrackExtended();
     TrackExtendedVec & getTrackExtendedVec();
     TrackerHitExtended * getTrackerHitFrom();
@@ -59,7 +66,7 @@ class TrackerHitExtended {
 
  private:
 
-    edm4hep::TrackerHit _trackerHit;
+    edm4hep::TrackerHit3D _trackerHit;
     TrackExtended * _trackAR;
     TrackerHitExtended * _hitTo;
     TrackerHitExtended * _hitFrom;

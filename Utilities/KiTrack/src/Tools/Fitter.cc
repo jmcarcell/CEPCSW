@@ -13,7 +13,7 @@
 #include "DataHelper/Navigation.h"
 #include "Tools/KiTrackMarlinTools.h"
 
-typedef std::vector<edm4hep::TrackerHit> TrackerHitVec;
+typedef std::vector<edm4hep::TrackerHit3D> TrackerHitVec;
 using namespace MarlinTrk;
 
 // by fucd: 3.5->3.0 default, will be read from GeomSvc
@@ -33,11 +33,11 @@ void Fitter::init_BField(){
 
 }
 
-bool compare_TrackerHit_z( edm4hep::TrackerHit a, edm4hep::TrackerHit b ){
+bool compare_TrackerHit_z( edm4hep::TrackerHit3D a, edm4hep::TrackerHit3D b ){
   return ( fabs(a.getPosition()[2]) < fabs( b.getPosition()[2]) ); //compare their z values
 }
 
-bool compare_TrackerHit_R( edm4hep::TrackerHit a, edm4hep::TrackerHit b ){
+bool compare_TrackerHit_R( edm4hep::TrackerHit3D a, edm4hep::TrackerHit3D b ){
   double Rad_a2 = (a.getPosition()[0]*a.getPosition()[0]) + (a.getPosition()[1]*a.getPosition()[1]) ;
   double Rad_b2 = (b.getPosition()[0]*b.getPosition()[0]) + (b.getPosition()[1]*b.getPosition()[1]) ;
   
@@ -60,7 +60,7 @@ Fitter::Fitter( edm4hep::MutableTrack* track , MarlinTrk::IMarlinTrkSystem* trkS
   fitVXD();
 }
 
-Fitter::Fitter( std::vector<edm4hep::TrackerHit> trackerHits , MarlinTrk::IMarlinTrkSystem* trkSystem ): _trkSystem( trkSystem ){
+Fitter::Fitter( std::vector<edm4hep::TrackerHit3D> trackerHits , MarlinTrk::IMarlinTrkSystem* trkSystem ): _trkSystem( trkSystem ){
   _trackerHits = trackerHits;
   fit();
 }
@@ -84,21 +84,21 @@ void Fitter::fitVXD(){
      
   unsigned number_of_added_hits = 0;
   unsigned ndof_added = 0;
-  std::vector< edm4hep::TrackerHit > added_hits;
-  std::vector< edm4hep::TrackerHit > added_hits_2D;
+  std::vector< edm4hep::TrackerHit3D > added_hits;
+  std::vector< edm4hep::TrackerHit3D > added_hits_2D;
   
   for( it = _trackerHits.begin() ; it != _trackerHits.end() ; ++it ) {
-    edm4hep::TrackerHit trkHit = Navigation::Instance()->GetTrackerHit((*it).getObjectID());
+    edm4hep::TrackerHit3D trkHit = Navigation::Instance()->GetTrackerHit((*it).getObjectID());
     bool isSuccessful = false; 
     
     if( UTIL::BitSet32( trkHit.getType() )[ UTIL::ILDTrkHitTypeBit::COMPOSITE_SPACEPOINT ]   ){ //it is a composite spacepoint
       //Split it up and hits to the MarlinTrk
-      std::vector< edm4hep::TrackerHit > rawHits;
+      std::vector< edm4hep::TrackerHit3D > rawHits;
       //const LCObjectVec rawObjects = trkHit.getRawHits();
       //for( unsigned k=0; k<rawObjects.size(); k++ ) rawHits.push_back( dynamic_cast< ConstTrackerHit >( rawObjects[k] ) );
       int nRawHit = trkHit.rawHits_size();
       for( unsigned k=0; k< nRawHit; k++ ){
-	edm4hep::TrackerHit rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
+	edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
 	rawHits.push_back(rawHit);
       }
       std::sort( rawHits.begin(), rawHits.end(), compare_TrackerHit_R );
@@ -224,7 +224,7 @@ void Fitter::fitVXD(){
   
   // fitting finished get hits in the fit for safety checks:
   
-  std::vector<std::pair<edm4hep::TrackerHit, double> > hits_in_fit;
+  std::vector<std::pair<edm4hep::TrackerHit3D, double> > hits_in_fit;
   
   // remember the hits are ordered in the order in which they were fitted
   // here we are fitting inwards so the first is the last and vice verse
@@ -241,13 +241,13 @@ void Fitter::fitVXD(){
     throw FitterException( s.str() );
     
   }
-  edm4hep::TrackerHit first_hit_in_fit = hits_in_fit.back().first;
+  edm4hep::TrackerHit3D first_hit_in_fit = hits_in_fit.back().first;
   if (! first_hit_in_fit.isAvailable()) {
     throw FitterException( std::string("Fitter::fit(): TrackerHit pointer to first hit == NULL ")  ) ;
   }
   
   
-  edm4hep::TrackerHit last_hit_in_fit = hits_in_fit.front().first;
+  edm4hep::TrackerHit3D last_hit_in_fit = hits_in_fit.front().first;
   if (!last_hit_in_fit.isAvailable()) {
     throw FitterException( std::string("Fitter::fit(): TrackerHit pointer to last hit == NULL ")  ) ;
   }
@@ -276,20 +276,20 @@ void Fitter::fit(){
   
   unsigned number_of_added_hits = 0;
   unsigned ndof_added = 0;
-  std::vector<edm4hep::TrackerHit> added_hits;
+  std::vector<edm4hep::TrackerHit3D> added_hits;
   
   for( it = _trackerHits.begin() ; it != _trackerHits.end() ; ++it ) {
-    edm4hep::TrackerHit trkHit = Navigation::Instance()->GetTrackerHit((*it).getObjectID());
+    edm4hep::TrackerHit3D trkHit = Navigation::Instance()->GetTrackerHit((*it).getObjectID());
     bool isSuccessful = false; 
     //std::cout << "Hit " << trkHit->id() << " " << trkHit.getPosition() << std::endl;
     if( UTIL::BitSet32( trkHit.getType() )[ UTIL::ILDTrkHitTypeBit::COMPOSITE_SPACEPOINT ]   ){ //it is a composite spacepoint
       //Split it up and hits to the MarlinTrk
-      std::vector<edm4hep::TrackerHit> rawHits;
+      std::vector<edm4hep::TrackerHit3D> rawHits;
       //const LCObjectVec rawObjects = trkHit.getRawHits();                    
       //for( unsigned k=0; k<rawObjects.size(); k++ ) rawHits.push_back( dynamic_cast< ConstTrackerHit >( rawObjects[k] ) );
       int nRawHit = trkHit.rawHits_size();
       for( unsigned k=0; k< nRawHit; k++ ){
-	edm4hep::TrackerHit rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
+	edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
 	//std::cout << "Raw Hit " << rawHit->id() << " " << rawHit.getPosition() << std::endl;
 	rawHits.push_back(rawHit);
       }
@@ -398,7 +398,7 @@ void Fitter::fit(){
   
   // fitting finished get hits in the fit for safety checks:
   
-  std::vector<std::pair<edm4hep::TrackerHit, double> > hits_in_fit;
+  std::vector<std::pair<edm4hep::TrackerHit3D, double> > hits_in_fit;
   
   // remember the hits are ordered in the order in which they were fitted
   // here we are fitting inwards so the first is the last and vice verse
@@ -412,12 +412,12 @@ void Fitter::fit(){
     
     throw FitterException( s.str() );
   }
-  edm4hep::TrackerHit first_hit_in_fit = hits_in_fit.back().first;
+  edm4hep::TrackerHit3D first_hit_in_fit = hits_in_fit.back().first;
   if (!first_hit_in_fit.isAvailable()) {
     throw FitterException( std::string("Fitter::fit(): TrackerHit pointer to first hit == NULL ")  ) ;
   }
   
-  edm4hep::TrackerHit last_hit_in_fit = hits_in_fit.front().first;
+  edm4hep::TrackerHit3D last_hit_in_fit = hits_in_fit.front().first;
   if (!last_hit_in_fit.isAvailable()) {
     throw FitterException( std::string("Fitter::fit(): TrackerHit pointer to last hit == NULL ")  ) ;
   }
@@ -480,13 +480,13 @@ const TrackStatePlus* Fitter::getTrackStatePlus( int trackStateLocation ){
      }
    }
    case 2/*lcio::TrackState::AtFirstHit*/:{
-     std::vector<std::pair<edm4hep::TrackerHit, double> > hits_in_fit;
+     std::vector<std::pair<edm4hep::TrackerHit3D, double> > hits_in_fit;
          
      // remember the hits are ordered in the order in which they were fitted
      // here we are fitting inwards so the first is the last and vice verse
      _marlinTrk->getHitsInFit(hits_in_fit);
      
-     edm4hep::TrackerHit first_hit_in_fit = hits_in_fit.back().first;
+     edm4hep::TrackerHit3D first_hit_in_fit = hits_in_fit.back().first;
           
      return_code = _marlinTrk->getTrackState(first_hit_in_fit, *trackState, chi2, ndf ) ;
      
@@ -508,10 +508,10 @@ const TrackStatePlus* Fitter::getTrackStatePlus( int trackStateLocation ){
      }
    }
    case 3/*lcio::TrackState::AtLastHit*/:{
-     std::vector<std::pair<edm4hep::TrackerHit, double> > hits_in_fit;
+     std::vector<std::pair<edm4hep::TrackerHit3D, double> > hits_in_fit;
      _marlinTrk->getHitsInFit(hits_in_fit);
      
-     edm4hep::TrackerHit last_hit_in_fit = hits_in_fit.front().first;
+     edm4hep::TrackerHit3D last_hit_in_fit = hits_in_fit.front().first;
           
      return_code = _marlinTrk->getTrackState(last_hit_in_fit, *trackState, chi2, ndf ) ;
          
@@ -533,10 +533,10 @@ const TrackStatePlus* Fitter::getTrackStatePlus( int trackStateLocation ){
      break;
    }
    case 4/*lcio::TrackState::AtCalorimeter*/:{
-     std::vector<std::pair<edm4hep::TrackerHit, double> > hits_in_fit;
+     std::vector<std::pair<edm4hep::TrackerHit3D, double> > hits_in_fit;
      _marlinTrk->getHitsInFit(hits_in_fit);
      
-     edm4hep::TrackerHit last_hit_in_fit = hits_in_fit.front().first;
+     edm4hep::TrackerHit3D last_hit_in_fit = hits_in_fit.front().first;
           
      UTIL::BitField64 encoder( UTIL::ILDCellID0::encoder_string ) ; 
      encoder.reset() ;  // reset to 0

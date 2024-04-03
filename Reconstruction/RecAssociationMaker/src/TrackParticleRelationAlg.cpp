@@ -55,7 +55,7 @@ StatusCode TrackParticleRelationAlg::execute() {
   }
 
   // Prepare map from hit to MCParticle
-  std::map<edm4hep::TrackerHit, edm4hep::MCParticle> mapHitParticle;
+  std::map<edm4hep::TrackerHit3D, edm4hep::MCParticle> mapHitParticle;
   debug() << "reading Association" << endmsg;
   for (auto hdl : m_inAssociationColHdls) {
     const edm4hep::MCRecoTrackerAssociationCollection* assCol = nullptr;
@@ -92,7 +92,7 @@ StatusCode TrackParticleRelationAlg::execute() {
     }
     
     if(trkCol) {
-      std::map<edm4hep::MCParticle, std::vector<edm4hep::TrackerHit> > mapParticleHits;
+      std::map<edm4hep::MCParticle, std::vector<edm4hep::TrackerHit3D> > mapParticleHits;
 
       for (auto track: *trkCol) {
 	std::map<edm4hep::MCParticle, int> mapParticleNHits;
@@ -128,7 +128,7 @@ StatusCode TrackParticleRelationAlg::execute() {
       }
       
       if (msgLevel(MSG::DEBUG)) {
-	for (std::map<edm4hep::MCParticle, std::vector<edm4hep::TrackerHit> >::iterator it=mapParticleHits.begin(); it!=mapParticleHits.end(); it++) {
+	for (std::map<edm4hep::MCParticle, std::vector<edm4hep::TrackerHit3D> >::iterator it=mapParticleHits.begin(); it!=mapParticleHits.end(); it++) {
 	  auto particle = it->first;
 	  auto hits     = it->second;
 	  debug() << "=== MCPaticle ===" << particle << endmsg;

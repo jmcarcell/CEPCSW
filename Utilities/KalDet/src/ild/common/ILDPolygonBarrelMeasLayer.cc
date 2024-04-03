@@ -13,7 +13,14 @@
 #include "TString.h"
 
 //#include <EVENT/TrackerHitPlane.h>
-#include <edm4hep/TrackerHit.h>
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
+#include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 #include <math.h>
 #include <assert.h>
@@ -136,7 +143,7 @@ Bool_t ILDPolygonBarrelMeasLayer::IsOnSurface(const TVector3 &xx) const
 }
 
 
-ILDVTrackHit* ILDPolygonBarrelMeasLayer::ConvertLCIOTrkHit(edm4hep::TrackerHit trkhit) const {
+ILDVTrackHit* ILDPolygonBarrelMeasLayer::ConvertLCIOTrkHit(edm4hep::TrackerHit3D trkhit) const {
   
   // streamlog_out(ERROR) << "ILDPolygonBarrelMeasLayer::ConvertLCIOTrkHit Not implemented: exit(1) called from " << __FILE__ << "   line " << __LINE__ << std::endl; 
   exit(1);

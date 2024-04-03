@@ -136,7 +136,7 @@ StatusCode TrackInspectAlg::execute(){
     for (auto relCol: relCols) {
     	if (relCol){
 	    for (auto rel: *relCol){
-		    std::pair<edm4hep::TrackerHit, edm4hep::MCParticle> p = std::make_pair(rel.getRec(), rel.getSim().getMCParticle());
+		    std::pair<edm4hep::TrackerHit3D, edm4hep::MCParticle> p = std::make_pair(rel.getRec(), rel.getSim().getMCParticle());
 		    if (hitmap.find(p) == hitmap.end()) hitmap[p] = 0.;
 		    hitmap[p] += rel.getWeight();
 	    }
@@ -212,9 +212,9 @@ double TrackInspectAlg::match(edm4hep::MCParticle particle, edm4hep::Track track
     double matchedHits = 0;
     double usedHits = 0;
     for (int i = 0; i < NHits; i++) {
-        edm4hep::TrackerHit hit = track.getTrackerHits(i);
+        edm4hep::TrackerHit3D hit = track.getTrackerHits(i);
         usedHits++;
-        std::pair<edm4hep::TrackerHit, edm4hep::MCParticle> ele = std::make_pair(hit, particle);
+        std::pair<edm4hep::TrackerHit3D, edm4hep::MCParticle> ele = std::make_pair(hit, particle);
         //std::cout << "lookup --> " << ele.first << std::endl;
         //if (hitmap.find(ele) != hitmap.end() ) {
         //std::cout << "find --> " << hitmap[ele] << std::endl;

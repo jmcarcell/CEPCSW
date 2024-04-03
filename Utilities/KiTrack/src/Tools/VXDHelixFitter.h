@@ -2,7 +2,14 @@
 #define VXDHelixFitter_h
 
 #include "edm4hep/Track.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
 #include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
 
 //#include "lcio.h"
 
@@ -47,7 +54,7 @@ class VXDHelixFitter{
 public:
    
   VXDHelixFitter( edm4hep::Track* track ) ;
-  VXDHelixFitter( std::vector < edm4hep::TrackerHit > trackerHits ) ;
+  VXDHelixFitter( std::vector < edm4hep::TrackerHit3D > trackerHits ) ;
    
    
    double getChi2(){ return _chi2; }
@@ -74,7 +81,7 @@ private:
    float _d0;
    float _z0;
    
-   std::vector< edm4hep::TrackerHit > _trackerHits;
+   std::vector< edm4hep::TrackerHit3D > _trackerHits;
   
    
 };
