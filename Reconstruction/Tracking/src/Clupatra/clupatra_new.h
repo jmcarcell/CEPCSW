@@ -475,9 +475,16 @@ namespace clupatra_new{
 				// streamlog_out( DEBUG3  )  << "               -- extrapolate TrackState : " << lcshort( ts )    << std::endl ;
 				// fucd: getTrackerHits(0) is possible to miss ILDVTrackHit
 				for(int ih=0;ih<nHit;ih++){
-				  edm4hep::TrackerHit ht = trk.getTrackerHits(ih);
+				  edm4hep::TrackerHit& ht = trk.getTrackerHits(ih);
 				  //need to add a dummy hit to the track
-				  if(mTrk->addHit( ht ) == MarlinTrk::IMarlinTrack::success) break;  // is this the right hit ??????????
+				  if(mTrk->addHit( edm4hep::TrackerHit3D(ht.getCellID(),
+                                                                         ht.getType(),
+                                                                         ht.getQuality(),
+                                                                         ht.getTime(),
+                                                                         ht.getEDep(),
+                                                                         ht.getEDepError(),
+                                                                         ht.getPosition(), {}))}
+                                  == MarlinTrk::IMarlinTrack::success) break;  // is this the right hit ??????????
 				}
 				mTrk->initialise( ts ,  _b ,  MarlinTrk::IMarlinTrack::backward ) ;
 
@@ -485,7 +492,14 @@ namespace clupatra_new{
 				int addHit = 0 ;
 
 				//-----   now try to add the three hits : ----------------
-				addHit = mTrk->addAndFit(  th0 , deltaChi, _chi2Max ) ;
+				addHit = mTrk->addAndFit(edm4hep::TrackerHit3D(th0.getCellID(),
+                                                                               th0.getType(),
+                                                                               th0.getQuality(),
+                                                                               th0.getTime(),
+                                                                               th0.getEDep(),
+                                                                               th0.getEDepError(),
+                                                                               th0.getPosition(), {}))
+                                  , deltaChi, _chi2Max ) ;
 
 				/*
 				 * FIXME Mingrui debug
@@ -498,7 +512,14 @@ namespace clupatra_new{
 				if( addHit !=  MarlinTrk::IMarlinTrack::success ) return false ;
 
 				//---------------------
-				addHit = mTrk->addAndFit(  th1 , deltaChi, _chi2Max ) ;
+				addHit = mTrk->addAndFit(edm4hep::TrackerHit3D(th1.getCellID(),
+                                                                               th1.getType(),
+                                                                               th1.getQuality(),
+                                                                               th1.getTime(),
+                                                                               th1.getEDep(),
+                                                                               th1.getEDepError(),
+                                                                               th1.getPosition(), {}))
+                                  , deltaChi, _chi2Max ) ;
 
 				/* FIXME Mingrui debug
 				   streamlog_out( DEBUG3 ) << "    ****  adding second hit : " <<  gear::Vector3D( th1->getPosition() )
@@ -510,7 +531,14 @@ namespace clupatra_new{
 				if( addHit !=  MarlinTrk::IMarlinTrack::success ) return false ;
 
 				//--------------------
-				addHit = mTrk->addAndFit(  th2 , deltaChi, _chi2Max ) ;
+				addHit = mTrk->addAndFit(edm4hep::TrackerHit3D(th2.getCellID(),
+                                                                               th2.getType(),
+                                                                               th2.getQuality(),
+                                                                               th2.getTime(),
+                                                                               th2.getEDep(),
+                                                                               th2.getEDepError(),
+                                                                               th2.getPosition(), {}))
+                                  , deltaChi, _chi2Max ) ;
 
 				/* FIXME Mingrui debug
 				   streamlog_out( DEBUG3 ) << "    ****  adding third hit : " <<  gear::Vector3D( th2->getPosition() )

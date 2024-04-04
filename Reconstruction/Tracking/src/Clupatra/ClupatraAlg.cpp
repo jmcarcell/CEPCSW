@@ -55,7 +55,6 @@ namespace edm4hep {
 // #include "edm4hep/TrackerHitPlane.h"
 
 
-using namespace edm4hep ;
 using namespace MarlinTrk ;
 
 using namespace clupatra_new ;
@@ -122,7 +121,7 @@ struct StripDistance2{
 	gear::Vector3D _pos ;
 	StripDistance2( const gear::Vector3D& pos) : _pos( pos ) {}
 
-	double operator()( const TrackerHit* t) {
+        double operator()( const edm4hep::TrackerHit3D* t) {
 
 /*
 		gear::Vector3D p(t->getPosition()[0], t->getPosition()[1], t->getPosition()[2]) ;
@@ -321,7 +320,7 @@ StatusCode ClupatraAlg::execute() {
 	for(int i=0 ; i < nHit ; ++i ) {
 
 		//------
-		TrackerHit th(col->at(i));
+		edm4hep::TrackerHit3D th(col->at(i));
 		//debug() << i << " " << th->getCellID() << endmsg;
 		if ( fabs(th.getPosition()[2]) > driftLength ) continue;
 
@@ -908,7 +907,7 @@ StatusCode ClupatraAlg::execute() {
 				std::vector<edm4hep::Track> mergedTrk ;
 
 				// vector to collect hits from segments
-				//      std::vector< TrackerHit* >  hits ;
+				//      std::vector< edm4hep::TrackerHit3D* >  hits ;
 				// hits.reserve( 1024 ) ;
 				// IMPL::TrackImpl* track = new  IMPL::TrackImpl ;
 				// tsCol->addElement( track ) ;
@@ -931,7 +930,7 @@ StatusCode ClupatraAlg::execute() {
 					   }
 					   */
 					for (auto it = trk.trackerHits_begin(); it != trk.trackerHits_end(); it++) {
-						TrackerHit hit = *it;
+						edm4hep::TrackerHit3D hit = *it;
 						hits.addElement( GHitof(hit) );
 					}
 
