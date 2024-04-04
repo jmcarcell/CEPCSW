@@ -2761,8 +2761,8 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       
       delete helix;
       
-      std::vector<TrackerHit> trkHits;
-      std::vector<TrackerHit> trkHits_used_inFit;
+      std::vector<TrackerHit3D> trkHits;
+      std::vector<TrackerHit3D> trkHits_used_inFit;
       
       int nFit = 0;
       for (int i=0; i<nHits; ++i) {
