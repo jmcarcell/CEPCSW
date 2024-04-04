@@ -1088,8 +1088,8 @@ StatusCode ClupatraAlg::execute() {
 				}
 
 				// take track states from first and last track :
-				MutableTrack firstTrk = mergedTrk.front() ;
-				MutableTrack lastTrk  = mergedTrk.back() ;
+                                edm4hep::MutableTrack firstTrk = mergedTrk.front() ;
+                                edm4hep::MutableTrack lastTrk  = mergedTrk.back() ;
 
 				/* !!!!!!!!!!!!!! critical important FIXME should wait zoujiaheng
 				   edm4hep::TrackState ts;
