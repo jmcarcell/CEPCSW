@@ -183,7 +183,14 @@ StatusCode TrackSubsetAlg::execute(){
     double qi = trackQI( track );
     debug() << "Track " << track->id() << " address " << track << "\t" << qi << "( ";
     std::vector<edm4hep::TrackerHit3D> hits;
-    std::copy(track->trackerHits_begin(), track->trackerHits_end(), std::back_inserter(hits));
+    hits.push_back(edm4hep::TrackerHit3D(hit.getCellID(),
+                                         hit.getType(),
+                                         hit.getQuality(),
+                                         hit.getTime(),
+                                         hit.getEDep(),
+                                         hit.getEDepError(),
+                                         hit.getPosition(),
+                                         {}));
     
     std::sort( hits.begin(), hits.end(), KiTrackMarlin::compare_TrackerHit_z );
     
