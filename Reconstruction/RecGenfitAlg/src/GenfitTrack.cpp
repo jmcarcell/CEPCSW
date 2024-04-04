@@ -1114,7 +1114,7 @@ bool GenfitTrack::storeTrack(edm4hep::MutableReconstructedParticle& recParticle,
         if(sdtMea){
             SDTHit++;
             if(flag) sdtFit++;
-            const edm4hep::TrackerHit3D* TrackerHit_ = sdtMea->getTrackerHit();
+            const edm4hep::TrackerHit* TrackerHit_ = sdtMea->getTrackerHit();
             track.addToTrackerHits(*TrackerHit_);
         }else{
             WireMeasurementDC* dcMea =
