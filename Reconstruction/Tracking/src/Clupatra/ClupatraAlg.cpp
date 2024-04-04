@@ -140,7 +140,7 @@ return 1;
 
 //----------------------------------------------------------------
 struct MeanAbsZOfTrack{
-	double operator()( Track t){
+      double operator()( edm4hep::Track t){
 		double z = 0 ;
 		int hitCount = 0 ;
 		/*
@@ -404,8 +404,8 @@ StatusCode ClupatraAlg::execute() {
 
 
 
-	TrackCollection* outCol =  _ClupatraTrackCollectionHandle.createAndPut();
-	TrackCollection* tsCol  =  _ClupatraTrackSegmentCollectionHandle.createAndPut();
+        edm4hep::TrackCollection* outCol =  _ClupatraTrackCollectionHandle.createAndPut();
+        edm4hep::TrackCollection* tsCol  =  _ClupatraTrackSegmentCollectionHandle.createAndPut();
         std::vector<ClupaPlcioTrack*> outCol_tmp;
         std::vector<ClupaPlcioTrack*> tsCol_tmp;
 	
@@ -568,7 +568,7 @@ StatusCode ClupatraAlg::execute() {
 				debug() << "Goes here" << endmsg;
 				if( nHitsAdded < 1  &&  outerRow >   2*_padRowRange  ){  //FIXME: make parameter ?
 
-					Track edm4hepTrk( converter( *icv ) ) ;
+                                        edm4hep::Track edm4hepTrk( converter( *icv ) ) ;
 					// debug() << "Goes goes here" << endmsg;
 
 					debug() << "=============  poor seed cluster - no hits added - started from row " <<  outerRow << " track id="
@@ -930,7 +930,7 @@ StatusCode ClupatraAlg::execute() {
 					   }
 					   */
 					for (auto it = trk.trackerHits_begin(); it != trk.trackerHits_end(); it++) {
-						edm4hep::TrackerHit3D hit = *it;
+						edm4hep::TrackerHit hit = *it;
 						hits.addElement( GHitof(hit) );
 					}
 
@@ -1128,7 +1128,7 @@ StatusCode ClupatraAlg::execute() {
 
 				double RMin = 0.0;
 				if (hasTrackStateAt(trk, lcio::TrackState::AtFirstHit  ) ) {
-					TrackState ts = getTrackStateAt(trk, lcio::TrackState::AtFirstHit  ) ;
+                                        edm4hep::TrackState ts = getTrackStateAt(trk, lcio::TrackState::AtFirstHit  ) ;
 					RMin = sqrt( ts.referencePoint[0] * ts.referencePoint[0]
 							+ ts.referencePoint[1] * ts.referencePoint[1] );
 
