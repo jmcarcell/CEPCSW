@@ -15,6 +15,7 @@ gaudi_add_module(Arbor
                       DataHelperLib
                       DetInterface
                       Gaudi::GaudiKernel
+                      Gaudi::GaudiAlgLib
                       k4FWCore::k4FWCore
                       ${LCContent_LIBRARIES}
                       ${CLHEP_LIBRARIES} 

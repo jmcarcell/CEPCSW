@@ -13,6 +13,7 @@ gaudi_add_module(GaudiPandora
                       DataHelperLib
                       DetInterface
                       Gaudi::GaudiKernel
+                      Gaudi::GaudiAlgLib
                       k4FWCore::k4FWCore
                       ${PandoraSDK_LIBRARIES}
                       ${LCContent_LIBRARIES}
