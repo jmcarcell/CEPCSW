@@ -241,7 +241,16 @@ StatusCode TrackSubsetAlg::execute(){
     
     std::vector<edm4hep::TrackerHit3D> trackerHitsObj;
     std::vector<edm4hep::TrackerHit3D> trackerHits;
-    std::copy(track->trackerHits_begin(), track->trackerHits_end(), std::back_inserter(trackerHitsObj));
+    for(auto& hit : track->getTrackerHits()){
+      trackerHitsObj.push_back(edm4hep::TrackerHit3D(hit.getCellID(),
+                                                     hit.getType(),
+                                                     hit.getQuality(),
+                                                     hit.getTime(),
+                                                     hit.getEDep(),
+                                                     hit.getEDepError(),
+                                                     hit.getPosition(),
+                                                     {}));
+    }
 
     for(unsigned i=0; i<trackerHitsObj.size(); i++){
       //debug() << trackerHitsObj[i].id() << endmsg;
