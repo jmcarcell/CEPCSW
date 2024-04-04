@@ -20,6 +20,15 @@
 //#include <IMPL/LCRelationImpl.h>
 //#include <IMPL/TrackerHitImpl.h>
 
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/MutableTrackerHit3D.h"
+#else
+#include "edm4hep/MutableTrackerHit.h"
+namespace edm4hep {
+  using MutableTrackerHit3D = edm4hep::MutableTrackerHit;
+} // namespace edm4hep
+#endif
+
 //stl exception handler
 #include <stdexcept>
 #include "CLHEP/Units/SystemOfUnits.h"
@@ -1298,7 +1307,7 @@ void TPCDigiAlg::writeMergedVoxelsToHit( vector <Voxel_tpc*>* hitsToMerge){
   const gear::PadRowLayout2D& padLayout = gearTPC.getPadLayout() ;
   const gear::Vector2D padCoord = padLayout.getPadCenter(1) ;
 
-  edm4hep::MutableTrackerHit trkHit;// = _trkhitVec->create();
+  edm4hep::MutableTrackerHit3D trkHit;// = _trkhitVec->create();
 
   double sumZ = 0;
   double sumPhi = 0;
