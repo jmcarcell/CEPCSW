@@ -96,11 +96,12 @@ void Fitter::fitVXD(){
       std::vector< edm4hep::TrackerHit3D > rawHits;
       //const LCObjectVec rawObjects = trkHit.getRawHits();
       //for( unsigned k=0; k<rawObjects.size(); k++ ) rawHits.push_back( dynamic_cast< ConstTrackerHit >( rawObjects[k] ) );
-      int nRawHit = trkHit.rawHits_size();
-      for( unsigned k=0; k< nRawHit; k++ ){
-	edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
-	rawHits.push_back(rawHit);
-      }
+      // TODO: this was uncommented!
+      // int nRawHit = trkHit.rawHits_size();
+      // for( unsigned k=0; k< nRawHit; k++ ){
+      //   edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
+      //   rawHits.push_back(rawHit);
+      // }
       std::sort( rawHits.begin(), rawHits.end(), compare_TrackerHit_R );
       
       for( unsigned k=0; k< rawHits.size(); k++ ){
@@ -287,12 +288,13 @@ void Fitter::fit(){
       std::vector<edm4hep::TrackerHit3D> rawHits;
       //const LCObjectVec rawObjects = trkHit.getRawHits();                    
       //for( unsigned k=0; k<rawObjects.size(); k++ ) rawHits.push_back( dynamic_cast< ConstTrackerHit >( rawObjects[k] ) );
-      int nRawHit = trkHit.rawHits_size();
-      for( unsigned k=0; k< nRawHit; k++ ){
-	edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
-	//std::cout << "Raw Hit " << rawHit->id() << " " << rawHit.getPosition() << std::endl;
-	rawHits.push_back(rawHit);
-      }
+      // TODO: This was uncommented!
+      // int nRawHit = trkHit.rawHits_size();
+      // for( unsigned k=0; k< nRawHit; k++ ){
+      //   edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(trkHit.getRawHits(k));
+      //   //std::cout << "Raw Hit " << rawHit->id() << " " << rawHit.getPosition() << std::endl;
+      //   rawHits.push_back(rawHit);
+      // }
       std::sort( rawHits.begin(), rawHits.end(), compare_TrackerHit_z );
       
       for( unsigned k=0; k< rawHits.size(); k++ ){

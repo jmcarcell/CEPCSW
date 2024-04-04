@@ -111,7 +111,7 @@ private:
    static float _bField;
    
    
-   std::vector< edm4hep::TrackerHit3D > _trackerHits;
+   std::vector< edm4hep::TrackerHit > _trackerHits;
    
    /** here the created TrackStates (plus) are stored */
    std::vector< const TrackStatePlus* > _trackStatesPlus;
