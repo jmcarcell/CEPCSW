@@ -2829,7 +2829,15 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       trkHits.reserve(r2_values.size());
 
       for (auto it=r2_values.begin(); it!=r2_values.end(); ++it) {
-        trkHits.push_back(it->second);
+        auto& hit = it->second;
+        trkHits.push_back(edm4hep::TrackerHit3D(hit.getCellID(),
+                                                hit.getType(),
+                                                hit.getQuality(),
+                                                hit.getTime(),
+                                                hit.getEDep(),
+                                                hit.getEDepError(),
+                                                hit.getPosition(),
+                                                {}));
       }
 
       bool fit_backwards = IMarlinTrack::backward;
