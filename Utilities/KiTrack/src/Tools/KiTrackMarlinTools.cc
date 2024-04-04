@@ -197,7 +197,8 @@ VXDHitSimple* KiTrackMarlin::createVirtualIPHit( const SectorSystemVXD* sectorSy
 }
 
 
-std::string KiTrackMarlin::getPositionInfo( edm4hep::TrackerHit3D hit ){
+template <class T>
+std::string KiTrackMarlin::getPositionInfo( T hit ){
    
    std::stringstream info;
    
@@ -248,7 +249,7 @@ std::string KiTrackMarlin::getTrackHitInfo( edm4hep::Track* track){
   //std::vector< edm4hep::TrackerHit3D > hits;
   unsigned int nHits = track->trackerHits_size();
   for(unsigned i=0; i<nHits; i++){
-    edm4hep::TrackerHit3D hit = track->getTrackerHits(i);
+    edm4hep::TrackerHit hit = track->getTrackerHits(i);
     info << getPositionInfo(hit);
   }
    
