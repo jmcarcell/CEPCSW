@@ -29,7 +29,17 @@ FTDHelixFitter::FTDHelixFitter( std::vector<edm4hep::TrackerHit3D> trackerHits )
 FTDHelixFitter::FTDHelixFitter( edm4hep::MutableTrack* track ){
   _trackerHits.clear();
   //int nHits = track->trackerHits_size();
-  std::copy(track->trackerHits_begin(), track->trackerHits_end(), std::back_inserter(_trackerHits));
+  for (auto& hit : track->getTrackerHits()) {
+    _trackerHits.push_back(edm4hep::TrackerHit3D(
+                                                 hit.getCellID(),
+                                                 hit.getType(),
+                                                 hit.getQuality(),
+                                                 hit.getTime(),
+                                                 hit.getEDep(),
+                                                 hit.getEDepError(),
+                                                 hit.getPosition(),
+                                                 {}));
+  }
   //for(int i=0;i<nHits;i++){
   //  edm4hep::TrackerHit3D hit = &track->getTrackerHits(i);
   //  _trackerHits.push_back(hit);
