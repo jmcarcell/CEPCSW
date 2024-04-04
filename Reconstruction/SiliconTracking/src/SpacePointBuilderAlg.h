@@ -8,10 +8,13 @@
 #include "edm4hep/SimTrackerHitCollection.h"
 #if __has_include("edm4hep/TrackerHit3DCollection.h")
 #include "edm4hep/TrackerHit3DCollection.h"
+#include "edm4hep/MutableTrackerHit3D.h"
 #else
 #include "edm4hep/TrackerHitCollection.h"
+#include "edm4hep/MutableTrackerHit.h"
 namespace edm4hep {
   using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
+  using MutableTrackerHit3D = edm4hep::MutableTrackerHit;
 } // namespace edm4hep
 #endif
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
@@ -151,7 +154,7 @@ class SpacePointBuilderAlg : public GaudiAlgorithm {
   
   
   /** @return a spacepoint (in the form of a TrackerHitImpl* ) created from two TrackerHitPlane* which stand for si-strips */
-  edm4hep::MutableTrackerHit createSpacePoint( edm4hep::TrackerHit3D a , edm4hep::TrackerHit3D b, double stripLength );
+  edm4hep::MutableTrackerHit3D createSpacePoint( edm4hep::TrackerHit3D a , edm4hep::TrackerHit3D b, double stripLength );
   
 //   TrackerHitImpl* createSpacePointOld( TrackerHitPlane* a , TrackerHitPlane* b );
   

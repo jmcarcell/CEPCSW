@@ -198,7 +198,7 @@ StatusCode SpacePointBuilderAlg::execute(){
             // add tolerence 
             strip_length_mm = strip_length_mm * (1.0 + _striplength_tolerance);
 	    try{
-	      edm4hep::MutableTrackerHit spacePoint = createSpacePoint( hitFront, hitBack, strip_length_mm);
+	      edm4hep::MutableTrackerHit3D spacePoint = createSpacePoint( hitFront, hitBack, strip_length_mm);
 
 	      //UTIL::CellIDEncoder<TrackerHitImpl> cellid_encoder( UTIL::ILDCellID0::encoder_string , spCol );
               //cellid_encoder.setValue( cellID0 ); //give the new hit, the CellID0 of the front hit
@@ -264,7 +264,7 @@ StatusCode SpacePointBuilderAlg::finalize(){
   return GaudiAlgorithm::finalize();
 }
 
-edm4hep::MutableTrackerHit SpacePointBuilderAlg::createSpacePoint( edm4hep::TrackerHit3D a , edm4hep::TrackerHit3D b, double stripLength ){
+edm4hep::MutableTrackerHit3D SpacePointBuilderAlg::createSpacePoint( edm4hep::TrackerHit3D a , edm4hep::TrackerHit3D b, double stripLength ){
   
   const edm4hep::Vector3d& pa = a.getPosition();
   double xa = pa[0];
@@ -402,7 +402,7 @@ edm4hep::MutableTrackerHit SpacePointBuilderAlg::createSpacePoint( edm4hep::Trac
   }
   
   //Create the new TrackerHit
-  edm4hep::MutableTrackerHit spacePoint;// = new edm4hep::TrackerHit3D();
+  edm4hep::MutableTrackerHit3D spacePoint;// = new edm4hep::TrackerHit3D();
   
   edm4hep::Vector3d pos(point.x(), point.y(), point.z());
   spacePoint.setPosition(pos) ;
