@@ -1166,7 +1166,7 @@ void TPCDigiAlg::writeVoxelToHit( Voxel_tpc* aVoxel){
   //  if( seed_hit->getRowIndex() > 5 ) return ;
   debug() << "==============" << endmsg;
   //store hit variables
-  edm4hep::MutableTrackerHit trkHit;// = _trkhitVec->create();
+  edm4hep::MutableTrackerHit3D trkHit;// = _trkhitVec->create();
   //now the hit pos has to be smeared
 
   double tpcRPhiRes = seed_hit->getRPhiRes();
@@ -1257,10 +1257,6 @@ void TPCDigiAlg::writeVoxelToHit( Voxel_tpc* aVoxel){
   if(pos[0]*pos[0]+pos[1]*pos[1]>0.0){
     //    push back the SimTHit for this TrackerHit
 
-    if (_use_raw_hits_to_store_simhit_pointer) {
-      trkHit.addToRawHits(_tpcHitMap[seed_hit].getObjectID());
-    }
-
     auto rel = _relCol->create();
     rel.setRec (trkHit);
     rel.setSim (_tpcHitMap[seed_hit]);
@@ -1320,10 +1316,6 @@ void TPCDigiAlg::writeMergedVoxelsToHit( vector <Voxel_tpc*>* hitsToMerge){
     sumEDep += hitsToMerge->at(ihitCluster)->getEDep();
     hitsToMerge->at(ihitCluster)->setIsMerged();
     lastR = hitsToMerge->at(ihitCluster)->getR();
-
-    if (_use_raw_hits_to_store_simhit_pointer) {
-      trkHit.addToRawHits(_tpcHitMap[hitsToMerge->at(ihitCluster)].getObjectID());
-    }
 
     auto rel = _relCol->create();
     rel.setRec (trkHit);

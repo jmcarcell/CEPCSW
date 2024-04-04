@@ -24,6 +24,7 @@ namespace edm4hep {
   using TrackerHit3DCollection = edm4hep::TrackerHitCollection;
 } // namespace edm4hep
 #endif
+#include "edm4hep/TrackerHit.h"
 #include "edm4hep/MCRecoTrackerAssociationCollection.h"
 
 #include "GaudiKernel/NTuple.h"
@@ -56,7 +57,7 @@ class TrackInspectAlg : public Algorithm {
         Gaudi::Property<bool> _useSET{this, "useSET", true};
         Gaudi::Property<bool> _useFTD{this, "useFTD", true};
 
-        std::map<std::pair<edm4hep::TrackerHit3D, edm4hep::MCParticle>, double> hitmap;
+        std::map<std::pair<edm4hep::TrackerHit, edm4hep::MCParticle>, double> hitmap;
         std::vector<std::tuple<edm4hep::MCParticle, edm4hep::Track, double>> matchvec;
         double match(edm4hep::MCParticle, edm4hep::Track);
 

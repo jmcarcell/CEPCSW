@@ -27,8 +27,14 @@
 #include "AbsHMatrix.h"
 #include "MeasurementOnPlane.h"
 
+
 namespace edm4hep{
+
+#if __has_include("edm4hep/TrackerHit3D.h")
+    class TrackerHit3D;
+#else
     class TrackerHit;
+#endif
     class SimTrackerHit;
 }
 
@@ -73,15 +79,15 @@ class PlanarMeasurementSDT : public AbsMeasurement {
    */
   void setStripV(bool v = true) {stripV_ = v;}
 
-  void setTrackerHit(const edm4hep::TrackerHit3D* hit){trackerHit_=hit;}
-  const edm4hep::TrackerHit3D* getTrackerHit(){return trackerHit_;}
+  void setTrackerHit(const edm4hep::TrackerHit* hit){trackerHit_=hit;}
+  const edm4hep::TrackerHit* getTrackerHit(){return trackerHit_;}
 
  protected:
   SharedPlanePtr physicalPlane_;   //! This is persistent, but '!' makes ROOT shut up.
   int planeId_; // planeId id is -1 per default
   bool stripV_;
   const edm4hep::SimTrackerHit* simTrackerHit_;
-  const edm4hep::TrackerHit3D* trackerHit_;
+  const edm4hep::TrackerHit* trackerHit_;
 
  public:
 

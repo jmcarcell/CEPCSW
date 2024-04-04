@@ -426,7 +426,7 @@ void TruthTrackerAlg::getTrackStateFromMcParticle(
             CLHEP::RandGauss::shoot(mcParticleVertex.z,m_resVertexZ);
         ///Momentum
 
-        const edm4hep::Vector3f mcParticleMom=mcParticle.getMomentum();//GeV
+        const edm4hep::Vector3d mcParticleMom=mcParticle.getMomentum();//GeV
 
         double mcParticlePt=sqrt(mcParticleMom.x*mcParticleMom.x+
                 mcParticleMom.y*mcParticleMom.y);
@@ -766,7 +766,6 @@ int TruthTrackerAlg::smearDCTkhit(DataHandle<edm4hep::TrackerHit3DCollection>&
         //smearHit.setEdx(hit.getEdx());
         smearHit.setPosition(hit.getPosition());
         smearHit.setCovMatrix(hit.getCovMatrix());
-        smearHit.addToRawHits(hit.getObjectID());
 
         ++nHit;
         for(int iAsso=0;iAsso<(int) assoHits->size();iAsso++)
@@ -862,7 +861,6 @@ int TruthTrackerAlg::addSimHitsToTk(
         ///Add hit to track
         track.addToTrackerHits(trackerHit);
         trackerHit.setEDep(simTrackerHit.getEDep());
-        trackerHit.addToRawHits(simTrackerHit.getObjectID());
         trackerHit.setType(-8);//FIXME?
         ++nHit;
     }
@@ -876,7 +874,7 @@ int TruthTrackerAlg::addHotsToTk(edm4hep::Track& sourceTrack,
     if(nHitAdded>0) return nHitAdded;
     int nHit=0;
     for(unsigned int iHit=0;iHit<sourceTrack.trackerHits_size();iHit++){
-        edm4hep::TrackerHit3D hit=sourceTrack.getTrackerHits(iHit);
+        edm4hep::TrackerHit hit=sourceTrack.getTrackerHits(iHit);
         UTIL::BitField64 encoder(lcio::ILDCellID0::encoder_string);
         encoder.setValue(hit.getCellID());
         if(encoder[lcio::ILDCellID0::subdet]==hitType){
@@ -895,7 +893,7 @@ int TruthTrackerAlg::nHotsOnTrack(edm4hep::Track& track, int hitType)
 {
     int nHit=0;
     for(unsigned int iHit=0;iHit<track.trackerHits_size();iHit++){
-        edm4hep::TrackerHit3D hit=track.getTrackerHits(iHit);
+        edm4hep::TrackerHit hit=track.getTrackerHits(iHit);
         UTIL::BitField64 encoder(lcio::ILDCellID0::encoder_string);
         encoder.setValue(hit.getCellID());
         if(encoder[lcio::ILDCellID0::subdet]==hitType){

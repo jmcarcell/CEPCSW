@@ -94,7 +94,6 @@ StatusCode CylinderDigiAlg::execute(){
     trkHit.setPosition (edm4hep::Vector3d(smearedX, smearedY, smearedZ));
     trkHit.setCovMatrix(std::array<float, 6>{m_resRPhi*m_resRPhi/2, 0, m_resRPhi*m_resRPhi/2, 0, 0, m_resZ*m_resZ});
     //trkHit.setType(CEPC::CYLINDER);
-    trkHit.addToRawHits(simhit.getObjectID());
     debug() << "Hit " << simhit.id() << ": " << pos << " -> " << trkHit.getPosition() << "s:" << system << " c:" << chamber << " l:" << layer
 	    << " pt = " << pt << " " << mom.x << " " << mom.y << " " << mom.z << endmsg;
 

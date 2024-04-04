@@ -723,7 +723,7 @@ void RecGenfitAlgSDT::debugEvent(const edm4hep::TrackCollection* sdtTrackCol,
         m_nSdtTrackHit = sdtTrack.trackerHits_size();
         if(sdtTrack.trackerHits_size()<1e-9) continue;
         for(int ihit=0;ihit<sdtTrack.trackerHits_size();ihit++){
-            edm4hep::TrackerHit3D sdtTrackHit = sdtTrack.getTrackerHits(ihit);
+            edm4hep::TrackerHit sdtTrackHit = sdtTrack.getTrackerHits(ihit);
         }
 
         //if(iSdtTrack>0) break;//TODO debug for some track only
@@ -769,7 +769,7 @@ void RecGenfitAlgSDT::debugEvent(const edm4hep::TrackCollection* sdtTrackCol,
         int iMcParticle=0;
         HelixClass helix_mcP;
         for(auto mcParticle : *mcParticleCol){
-            edm4hep::Vector3f mcPocaMom = mcParticle.getMomentum();//GeV
+            edm4hep::Vector3d mcPocaMom = mcParticle.getMomentum();//GeV
             edm4hep::Vector3d mcPocaPos = mcParticle.getVertex();
 
             double mcPos[3]={(mcPocaPos.x),(mcPocaPos.y),(mcPocaPos.z)};
@@ -829,7 +829,7 @@ void RecGenfitAlgSDT::debugEvent(const edm4hep::TrackCollection* sdtTrackCol,
     for(auto sdtRecTrack: *sdtRecTrackCol){
         for(int iHit=0;iHit<sdtRecTrack.trackerHits_size();iHit++)
         {
-            edm4hep::TrackerHit3D sdtRecTrackHit = sdtRecTrack.getTrackerHits(iHit);
+            edm4hep::TrackerHit sdtRecTrackHit = sdtRecTrack.getTrackerHits(iHit);
         }
         for(unsigned int i=0; i<sdtRecTrack.trackStates_size(); i++) {
             edm4hep::TrackState trackStat=sdtRecTrack.getTrackStates(i);

@@ -116,7 +116,7 @@ class GenfitTrack {
             float sigma,int sortMethod);
 
     ///Add one silicon hits
-    bool addSiliconMeasurement(edm4hep::TrackerHit3D* hit,
+    bool addSiliconMeasurement(edm4hep::TrackerHit* hit,
             float sigmaU,float sigmaV,int cellID,int hitID);
 
     ///Add silicon measurements, return number of hits on track
@@ -243,7 +243,7 @@ class GenfitTrack {
     genfit::AbsTrackRep* getRep(int id=0) const;
     bool getMOP(int hitID, genfit::MeasuredStateOnPlane& mop,
             genfit::AbsTrackRep* trackRep=nullptr) const;
-    const dd4hep::rec::ISurface* getISurface(edm4hep::TrackerHit3D* hit);
+    const dd4hep::rec::ISurface* getISurface(edm4hep::TrackerHit* hit);
     void getSeedCov(TMatrixDSym& cov);
     void getAssoSimTrackerHit(
             const edm4hep::MCRecoTrackerAssociationCollection*& assoHits,
@@ -259,7 +259,7 @@ class GenfitTrack {
     void clearGenfitHitVec();
     void getISurfaceOUV(const dd4hep::rec::ISurface* iSurface,TVector3& o,
             TVector3& u,TVector3& v,double& lengthU,double& lengthV);
-    void getMeasurementAndCov(edm4hep::TrackerHit3D* hit,TVector3& pos,TMatrixDSym& cov);
+    void getMeasurementAndCov(edm4hep::TrackerHit* hit,TVector3& pos,TMatrixDSym& cov);
     int getSigmas(int cellID,std::vector<float> sigmaUVec,
         std::vector<float> sigmaVVec,float& sigmaU,float& sigmaV)const;
     bool isCDCHit(edm4hep::TrackerHit3D* hit);

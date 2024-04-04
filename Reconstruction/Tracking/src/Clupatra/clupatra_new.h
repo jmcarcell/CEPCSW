@@ -405,11 +405,11 @@ namespace clupatra_new{
 				unsigned nhit0 = trk0.trackerHits_size() ;
 				unsigned nhit1 = trk1.trackerHits_size() ;
 
-				edm4hep::TrackerHit3D thf0 = trk0.getTrackerHits( 0 ) ;
-				edm4hep::TrackerHit3D thf1 = trk1.getTrackerHits( 0 ) ;
+				edm4hep::TrackerHit thf0 = trk0.getTrackerHits( 0 ) ;
+				edm4hep::TrackerHit thf1 = trk1.getTrackerHits( 0 ) ;
 
-				edm4hep::TrackerHit3D thl0 = trk0.getTrackerHits( nhit0 - 1 ) ;
-				edm4hep::TrackerHit3D thl1 = trk1.getTrackerHits( nhit1 - 1 ) ;
+				edm4hep::TrackerHit thl0 = trk0.getTrackerHits( nhit0 - 1 ) ;
+				edm4hep::TrackerHit thl1 = trk1.getTrackerHits( nhit1 - 1 ) ;
 
 				// lcio::TrackerHit* thm1 = trk1->getTrackerHits()[ nhit1 / 2 ] ;
 				// lcio::TrackerHit* thm0 = trk0->getTrackerHits()[ nhit0 / 2 ] ;
@@ -439,9 +439,9 @@ namespace clupatra_new{
 
 				unsigned n = oth.trackerHits_size() ;
 
-				edm4hep::TrackerHit3D th0 =  ( outward ? oth.getTrackerHits(0) : oth.getTrackerHits(n-1) ) ;
-				edm4hep::TrackerHit3D th1 =              (oth.getTrackerHits(n/2) );
-				edm4hep::TrackerHit3D th2 =  ( outward ? oth.getTrackerHits(n-1) : oth.getTrackerHits(0) );
+				edm4hep::TrackerHit th0 =  ( outward ? oth.getTrackerHits(0) : oth.getTrackerHits(n-1) ) ;
+				edm4hep::TrackerHit th1 =              (oth.getTrackerHits(n/2) );
+				edm4hep::TrackerHit th2 =  ( outward ? oth.getTrackerHits(n-1) : oth.getTrackerHits(0) );
 
 
 				// track state at last hit migyt be rubish....
@@ -475,7 +475,7 @@ namespace clupatra_new{
 				// streamlog_out( DEBUG3  )  << "               -- extrapolate TrackState : " << lcshort( ts )    << std::endl ;
 				// fucd: getTrackerHits(0) is possible to miss ILDVTrackHit
 				for(int ih=0;ih<nHit;ih++){
-				  edm4hep::TrackerHit3D ht = trk.getTrackerHits(ih);
+				  edm4hep::TrackerHit ht = trk.getTrackerHits(ih);
 				  //need to add a dummy hit to the track
 				  if(mTrk->addHit( ht ) == MarlinTrk::IMarlinTrack::success) break;  // is this the right hit ??????????
 				}

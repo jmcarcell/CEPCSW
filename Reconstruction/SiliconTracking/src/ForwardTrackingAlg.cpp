@@ -1001,7 +1001,7 @@ void ForwardTrackingAlg::finaliseTrack( edm4hep::MutableTrack* trackImpl ){
   
   unsigned int nHits = trackImpl->trackerHits_size();
   for( unsigned j=0; j<nHits; j++ ){
-    const edm4hep::TrackerHit3D& hit = trackImpl->getTrackerHits(j);
+    const edm4hep::TrackerHit& hit = trackImpl->getTrackerHits(j);
     UTIL::BitField64 encoder( UTIL::ILDCellID0::encoder_string );
     encoder.setValue( hit.getCellID() );
     int subdet =  encoder[UTIL::ILDCellID0::subdet];

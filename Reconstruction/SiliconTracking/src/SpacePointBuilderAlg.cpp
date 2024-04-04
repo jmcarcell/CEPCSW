@@ -205,10 +205,6 @@ StatusCode SpacePointBuilderAlg::execute(){
               //cellid_encoder.setCellID( spacePoint ) ;
 	      spacePoint.setCellID(cellID0);
 
-              // store the hits it's composed of:
-              spacePoint.addToRawHits( hitFront.getObjectID() );
-              spacePoint.addToRawHits( hitBack.getObjectID() );
-
               spacePoint.setType( UTIL::set_bit( spacePoint.getType() ,  UTIL::ILDTrkHitTypeBit::COMPOSITE_SPACEPOINT ) ) ;
 
               spCol->push_back( spacePoint );

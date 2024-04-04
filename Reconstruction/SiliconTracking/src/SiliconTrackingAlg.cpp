@@ -2814,11 +2814,11 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       covMatrix[14] = ( _initialTrackError_tanL  ); //sigma_tanl^2
       
       
-      std::vector< std::pair<float, edm4hep::TrackerHit3D> > r2_values;
+      std::vector< std::pair<float, edm4hep::TrackerHit> > r2_values;
       r2_values.reserve(trkHits.size());
       
-      for (std::vector<edm4hep::TrackerHit3D>::iterator it=trkHits.begin(); it!=trkHits.end(); ++it) {
-        edm4hep::TrackerHit3D h = *it;
+      for (auto it=trkHits.begin(); it!=trkHits.end(); ++it) {
+        edm4hep::TrackerHit h = *it;
         float r2 = h.getPosition()[0]*h.getPosition()[0]+h.getPosition()[1]*h.getPosition()[1];
         r2_values.push_back(std::make_pair(r2, *it));
       }
@@ -2828,7 +2828,7 @@ void SiliconTrackingAlg::FinalRefit(edm4hep::TrackCollection* trk_col) {
       trkHits.clear();
       trkHits.reserve(r2_values.size());
 
-      for (std::vector< std::pair<float, edm4hep::TrackerHit3D> >::iterator it=r2_values.begin(); it!=r2_values.end(); ++it) {
+      for (auto it=r2_values.begin(); it!=r2_values.end(); ++it) {
         trkHits.push_back(it->second);
       }
 

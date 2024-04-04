@@ -70,7 +70,7 @@ namespace edm4hep {
 
 #include <TStopwatch.h>
 
-typedef std::vector<edm4hep::TrackerHit3D> TrackerHitVec;
+typedef std::vector<edm4hep::TrackerHit> TrackerHitVec;
 
 using namespace edm4hep ;
 using namespace MarlinTrk ;
@@ -1184,7 +1184,7 @@ void FullLDCTrackingAlg::prepareVectors() {
       trackExt->setNDF(tpcTrack.getNdf());
       trackExt->setChi2(tpcTrack.getChi2());
       for (int iHit=0;iHit<nHits;++iHit) {
-	edm4hep::TrackerHit3D hit = tpcTrack.getTrackerHits(iHit);
+	edm4hep::TrackerHit hit = tpcTrack.getTrackerHits(iHit);
 	if (!hit.isAvailable()) {
 	  error() << "Tracker hit not available" << endmsg;
 	  continue;
@@ -1611,7 +1611,7 @@ TrackExtended * FullLDCTrackingAlg::CombineTracks(TrackExtended * tpcTrack, Trac
   r2_values.reserve(trkHits.size());
   
   for (TrackerHitVec::iterator it=trkHits.begin(); it!=trkHits.end(); ++it) {
-    edm4hep::TrackerHit3D h = *it;
+    edm4hep::TrackerHit h = *it;
     float r2 = h.getPosition()[0]*h.getPosition()[0]+h.getPosition()[1]*h.getPosition()[1];
     r2_values.push_back(std::make_pair(r2, *it));
   }
@@ -1722,22 +1722,23 @@ TrackExtended * FullLDCTrackingAlg::CombineTracks(TrackExtended * tpcTrack, Trac
     hits.push_back(hit);
     
     // add the raw hits ...
-    int nRawHits = hit.rawHits_size();
-    if ( nRawHits>0 ) {
-      for (unsigned ihit=0; ihit < nRawHits; ++ihit) {
-	try{
-	  int type = hit.getType();
-	  if(UTIL::BitSet32(type)[UTIL::ILDTrkHitTypeBit::COMPOSITE_SPACEPOINT]){
-	    edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(hit.getRawHits(ihit));
-	    hits.push_back(rawHit);
-	  }
-	  else debug() << "not space point, id=" << hit.id() << endmsg;
-	}
-	catch(std::runtime_error& e){
-	  debug() << e.what() << " raw hit id = " << hit.getRawHits(ihit) << " for TrackerHit id = " << hit.id() << endmsg;
-	}
-      }
-    }
+    // TODO: This was uncommented!
+    // int nRawHits = hit.rawHits_size();
+    // if ( nRawHits>0 ) {
+    //   for (unsigned ihit=0; ihit < nRawHits; ++ihit) {
+    //     try{
+    //       int type = hit.getType();
+    //       if(UTIL::BitSet32(type)[UTIL::ILDTrkHitTypeBit::COMPOSITE_SPACEPOINT]){
+    //         edm4hep::TrackerHit3D rawHit = Navigation::Instance()->GetTrackerHit(hit.getRawHits(ihit));
+    //         hits.push_back(rawHit);
+    //       }
+    //       else debug() << "not space point, id=" << hit.id() << endmsg;
+    //     }
+    //     catch(std::runtime_error& e){
+    //       debug() << e.what() << " raw hit id = " << hit.getRawHits(ihit) << " for TrackerHit id = " << hit.id() << endmsg;
+    //     }
+    //   }
+    // }
     
     // now double loop over the outliers and the hits assosiated with this TrackerHitExtended and compare
     for ( unsigned ohit = 0; ohit < outliers.size(); ++ohit) {
@@ -3673,7 +3674,7 @@ void FullLDCTrackingAlg::AssignOuterHitsToTracks(TrackerHitExtendedVec hitVec, f
           r2_values.reserve(trkHits.size());
           
           for (TrackerHitVec::iterator it=trkHits.begin(); it!=trkHits.end(); ++it) {
-	    edm4hep::TrackerHit3D h = *it;
+	    edm4hep::TrackerHit h = *it;
             float r2 = h.getPosition()[0]*h.getPosition()[0]+h.getPosition()[1]*h.getPosition()[1];
             r2_values.push_back(std::make_pair(r2, *it));
           }

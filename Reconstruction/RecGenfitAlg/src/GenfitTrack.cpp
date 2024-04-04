@@ -239,7 +239,7 @@ bool GenfitTrack::addSpacePointMeasurement(const TVector3& pos,
 
 /// Return isurface of a silicon hit
 const dd4hep::rec::ISurface*
-GenfitTrack::getISurface(edm4hep::TrackerHit3D* hit){
+GenfitTrack::getISurface(edm4hep::TrackerHit* hit){
 //GenfitTrack::getISurface(edm4hep::ConstTrackerHit* hit){
     dd4hep::rec::SurfaceManager surfaceManager(*m_geomSvc->lcdd());
 
@@ -276,7 +276,7 @@ GenfitTrack::getISurface(edm4hep::TrackerHit3D* hit){
 
 /// Add a 1d strip or 2d pixel smeared by sigma
     bool
-GenfitTrack::addSiliconMeasurement(edm4hep::TrackerHit3D* hit,
+GenfitTrack::addSiliconMeasurement(edm4hep::TrackerHit* hit,
         float sigmaU,float sigmaV,int cellID,int hitID)
 {
     if(m_debug>0) std::cout<<"addSiliconMeasurement "<<*hit<<std::endl;
@@ -341,8 +341,8 @@ int GenfitTrack::addSiliconMeasurements(edm4hep::Track& track,
     ///Get TrackerHit on Track
     int nHitAdd=0;
     for(unsigned int iHit=0;iHit<track.trackerHits_size();iHit++){
-        edm4hep::TrackerHit3D* trackerHit=
-          new edm4hep::TrackerHit3D(track.getTrackerHits(iHit));
+        edm4hep::TrackerHit* trackerHit=
+          new edm4hep::TrackerHit(track.getTrackerHits(iHit));
         unsigned long long cellID=trackerHit->getCellID();
         float sigmaU,sigmaV;
         int sigmaUID=getSigmas(cellID,sigmaUVec,sigmaVVec,sigmaU,sigmaV);
@@ -449,11 +449,11 @@ int GenfitTrack::addWireMeasurementsOnTrack(edm4hep::Track& track,float sigma,
         return nHitAdd;
     }
 
-    podio::RelationRange<edm4hep::TrackerHit3D> hits_t=track.getTrackerHits();
+    podio::RelationRange<edm4hep::TrackerHit> hits_t=track.getTrackerHits();
     std::vector<edm4hep::TrackerHit3D*> hits;
     //hits.reserve(1000);
     for(auto &h:hits_t){
-        edm4hep::TrackerHit3D* hit = const_cast<edm4hep::TrackerHit3D*>(&h);
+        edm4hep::TrackerHit hit = const_cast<edm4hep::TrackerHit*>(&h);
         hits.push_back(hit); 
     }
     nHitAdd=addWireMeasurementsFromList(hits,sigma,assoHits,sortMethod,truthAmbig,skipCorner,skipNear);
@@ -792,7 +792,7 @@ int GenfitTrack::addSpacePointsSi(const edm4hep::Track& track,
     for(unsigned int iHit=0;iHit<track.trackerHits_size();iHit++){
         int detTypeID=getDetTypeID(track.getTrackerHits(iHit).getCellID());
         if(m_geomSvc->lcdd()->constant<int>("DetID_DC")==detTypeID) continue;
-        edm4hep::TrackerHit3D hit=track.getTrackerHits(iHit);
+        edm4hep::TrackerHit hit=track.getTrackerHits(iHit);
         edm4hep::Vector3d pos=hit.getPosition();
 
         TVector3 p(pos.x,pos.y,pos.z);
@@ -824,7 +824,7 @@ int GenfitTrack::addSpacePointsDC(const edm4hep::Track& track,
     ///Get TrackerHit with min. time in Cell
     std::vector<edm4hep::SimTrackerHit> sortedDCTrackHitCol;
     for(unsigned int iHit=0;iHit<track.trackerHits_size();iHit++){
-        edm4hep::TrackerHit3D hit=track.getTrackerHits(iHit);
+        edm4hep::TrackerHit hit=track.getTrackerHits(iHit);
         int detTypeID=getDetTypeID(track.getTrackerHits(iHit).getCellID());
         if(m_geomSvc->lcdd()->constant<int>("DetID_DC")!=detTypeID) continue;
 
@@ -1009,7 +1009,7 @@ bool GenfitTrack::debugDistance(const edm4hep::TrackerHit3DCollection* dCDigiCol
         genfit::PlanarMeasurementSDT* sdtMea =
             dynamic_cast<genfit::PlanarMeasurementSDT*>(absMea);
         if(sdtMea){
-            const edm4hep::TrackerHit3D* TrackerHit_ = sdtMea->getTrackerHit();
+            const edm4hep::TrackerHit* TrackerHit_ = sdtMea->getTrackerHit();
             SDTHit++;
         }else{
             WireMeasurementDC* dcMea =
@@ -1389,7 +1389,7 @@ void GenfitTrack::getTrackFromMCPartile(const edm4hep::MCParticle mcParticle,
 void GenfitTrack::getPosMomFromMCPartile(const edm4hep::MCParticle mcParticle,
         TVector3& pos,TVector3& mom) const{
     const edm4hep::Vector3d mcParticleVertex=mcParticle.getVertex();//mm
-    const edm4hep::Vector3f mcParticleMom=mcParticle.getMomentum();//GeV
+    const edm4hep::Vector3d mcParticleMom=mcParticle.getMomentum();//GeV
     pos[0]=mcParticleVertex.x*GenfitUnit::mm;
     pos[1]=mcParticleVertex.y*GenfitUnit::mm;
     pos[2]=mcParticleVertex.z*GenfitUnit::mm;
@@ -1471,7 +1471,7 @@ void GenfitTrack::getISurfaceOUV(const dd4hep::rec::ISurface* iSurface,TVector3&
     lengthV=iSurface->length_along_v();
 }
 
-void GenfitTrack::getMeasurementAndCov(edm4hep::TrackerHit3D* hit,TVector3& pos,TMatrixDSym& cov){
+void GenfitTrack::getMeasurementAndCov(edm4hep::TrackerHit* hit,TVector3& pos,TMatrixDSym& cov){
 
     pos.SetXYZ(hit->getPosition().x*GenfitUnit::mm,
             hit->getPosition().y*GenfitUnit::mm,

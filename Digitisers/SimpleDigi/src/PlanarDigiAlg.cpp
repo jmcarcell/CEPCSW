@@ -390,7 +390,6 @@ StatusCode PlanarDigiAlg::execute()
             << " to tracker hit " << trkHit.id()
             << " with a weight of " << weight 
             << endmsg;
-    trkHit.addToRawHits(SimTHit.getObjectID());
     rel.setSim(SimTHit);
     rel.setRec(trkHit);
     rel.setWeight(weight);

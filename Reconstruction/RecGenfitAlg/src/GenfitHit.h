@@ -10,6 +10,16 @@
 #ifndef RECGENFITALG_GENFITHIT_H
 #define RECGENFITALG_GENFITHIT_H
 #include "TVector3.h"
+#if __has_include("edm4hep/TrackerHit3D.h")
+#include "edm4hep/TrackerHit3D.h"
+#else
+#include "edm4hep/TrackerHit.h"
+namespace edm4hep {
+  using TrackerHit3D = edm4hep::TrackerHit;
+} // namespace edm4hep
+#endif
+#include "edm4hep/TrackerHit.h"
+
 
 namespace edm4hep{
     class SimTrackerHit;
@@ -25,7 +35,7 @@ namespace dd4hep {
 
 class GenfitHit{
     public:
-        GenfitHit(const edm4hep::TrackerHit3D* trackerHit,
+        GenfitHit(const edm4hep::TrackerHit* trackerHit,
                 const edm4hep::SimTrackerHit* simTrackerHit,
                 const dd4hep::DDSegmentation::BitFieldCoder* decoder,
                 const dd4hep::DDSegmentation::GridDriftChamber* gridDriftChamber,
