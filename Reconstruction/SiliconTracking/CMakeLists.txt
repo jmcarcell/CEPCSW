@@ -11,6 +11,7 @@ gaudi_add_module(SiliconTracking
                       TrackSystemSvcLib
                       DataHelperLib
                       KiTrackLib
+                      Gaudi::GaudiAlgLib
                       Gaudi::GaudiKernel
                       k4FWCore::k4FWCore 
                       ${GEAR_LIBRARIES} 
