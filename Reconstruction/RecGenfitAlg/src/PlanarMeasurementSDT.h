@@ -30,11 +30,7 @@
 
 namespace edm4hep{
 
-#if __has_include("edm4hep/TrackerHit3D.h")
-    class TrackerHit3D;
-#else
     class TrackerHit;
-#endif
     class SimTrackerHit;
 }
 
