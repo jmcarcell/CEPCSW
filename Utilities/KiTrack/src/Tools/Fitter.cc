@@ -66,7 +66,17 @@ Fitter::Fitter( edm4hep::MutableTrack* track , MarlinTrk::IMarlinTrkSystem* trkS
 
 Fitter::Fitter( edm4hep::MutableTrack* track , MarlinTrk::IMarlinTrkSystem* trkSystem, int VXDFlag ): _trkSystem( trkSystem ){
   _trackerHits.clear();
-  std::copy(track->trackerHits_begin(), track->trackerHits_end(), std::back_inserter(_trackerHits));
+  for (auto& hit : track->getTrackerHits()) {
+    _trackerHits.push_back(edm4hep::TrackerHit3D(
+                                                 hit.getCellID(),
+                                                 hit.getType(),
+                                                 hit.getQuality(),
+                                                 hit.getTime(),
+                                                 hit.getEDep(),
+                                                 hit.getEDepError(),
+                                                 hit.getPosition(),
+                                                 {}));
+  }
   //_trackerHits = track->getTrackerHits();
   fitVXD();
 }
